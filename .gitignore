@@ -1,12 +1,11 @@
 HELP.md
-Work.md
+WORK.md
 target/
 .gitignore
+*.md
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
-
-

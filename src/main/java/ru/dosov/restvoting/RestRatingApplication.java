@@ -1,4 +1,4 @@
-package ru.dosov.restrating;
+package ru.dosov.restvoting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
