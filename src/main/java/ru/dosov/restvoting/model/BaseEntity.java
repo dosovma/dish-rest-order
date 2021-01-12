@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 
@@ -21,6 +22,7 @@ public abstract class BaseEntity implements Persistable<Integer> {
     }
 
     @Override
+    @JsonIgnore
     public boolean isNew() {
         return id == null;
     }

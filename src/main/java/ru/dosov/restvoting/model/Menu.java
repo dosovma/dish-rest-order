@@ -2,6 +2,7 @@ package ru.dosov.restvoting.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -21,7 +22,7 @@ public class Menu extends DatedEntity {
     )
     private Set<Dish> dishes;
 
-    public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {
+    public Menu(Integer id, LocalDateTime date, Restaurant restaurant, Set<Dish> dishes) {
         super(id, date);
         this.restaurant = restaurant;
         this.dishes = dishes;

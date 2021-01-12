@@ -2,6 +2,7 @@ package ru.dosov.restvoting.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "user_id", "date"}, name = "restaurant_user_date_unique_idx"))
@@ -15,7 +16,7 @@ public class Vote extends DatedEntity {
     @JoinColumn(name = "rest_id")
     private Restaurant restaurant;
 
-    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
+    public Vote(Integer id, LocalDateTime date, User user, Restaurant restaurant) {
         super(id, date);
         this.user = user;
         this.restaurant = restaurant;

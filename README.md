@@ -1,24 +1,26 @@
+#ПРИЛОЖЕНИЕ ЕЩЕ В РАЗРАБОТКЕ
+
 ver app 0.1
 ver readme 0.1
 
-###Resources
+### Resources
 * git - [https://github.com/dosovma/dish-rest-order](https://github.com/dosovma/dish-rest-order)
 * heroku - 
 
-##Description
+## Description
 
-##Stack
+## Stack
 Spring Boot
 Spring MVC
 Spring Data JPA
 H2
 
-##Architecture
+## Architecture
 DB
 Model - Repository
 RestController - Util class
 
-##Functionality
+## Functionality
 *Локализация
 *Типы ошибок
 *BeanMatcher?
@@ -34,7 +36,7 @@ Spring DataJPA использовать optional
 Валидация
 on delete cascade dont forget
 
-##REST documentation
+## REST documentation
 
 ### Future feature
 * Выделения гранд админа и обычного админа
