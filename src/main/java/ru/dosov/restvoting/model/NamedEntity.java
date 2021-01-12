@@ -2,7 +2,6 @@ package ru.dosov.restvoting.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 

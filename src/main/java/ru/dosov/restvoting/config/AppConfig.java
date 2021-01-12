@@ -1,8 +1,8 @@
 package ru.dosov.restvoting.config;
 
+import org.h2.tools.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.h2.tools.Server;
 
 import java.sql.SQLException;
 
