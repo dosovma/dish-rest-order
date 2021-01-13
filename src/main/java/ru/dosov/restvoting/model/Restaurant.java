@@ -1,6 +1,7 @@
 package ru.dosov.restvoting.model;
 
 import org.hibernate.validator.constraints.Length;
+import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;

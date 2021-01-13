@@ -1,5 +1,7 @@
 package ru.dosov.restvoting.model;
 
+import ru.dosov.restvoting.model.AbstractEntity.DatedEntity;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

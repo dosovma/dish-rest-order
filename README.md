@@ -1,4 +1,4 @@
-#ПРИЛОЖЕНИЕ ЕЩЕ В РАЗРАБОТКЕ
+# ПРИЛОЖЕНИЕ ЕЩЕ В РАЗРАБОТКЕ
 
 ver app 0.1
 ver readme 0.1
@@ -26,6 +26,7 @@ RestController - Util class
 *BeanMatcher?
 *Json View?
 *написано, что это не нужно
+Lombok
 Кеширование
 Тесты JUnit
 Транзакции

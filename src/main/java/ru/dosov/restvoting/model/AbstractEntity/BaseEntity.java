@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.model;
+package ru.dosov.restvoting.model.AbstractEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;

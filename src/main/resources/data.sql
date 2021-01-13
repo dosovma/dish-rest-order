@@ -19,10 +19,10 @@ VALUES ('potato', 40.05),
        ('cake', 5.60);
 
 INSERT INTO USERS (NAME, EMAIL, PASSWORD)
-VALUES ('Mike', 'mike@mail.ru', 'mikepassword'),
-       ('John', 'john@mail.ru', 'johnpassword'),
-       ('Kate', 'kate@mail.ru', 'katepassword'),
-       ('Admin', 'admin@mail.ru', 'adminpassword');
+VALUES ('Mike', 'mike@mail.ru', '{noop}mikepassword'),
+       ('John', 'john@mail.ru', '{noop}johnpassword'),
+       ('Kate', 'kate@mail.ru', '{noop}katepassword'),
+       ('Admin', 'admin@mail.ru', '{noop}adminpassword');
 
 INSERT INTO USER_ROLE (USER_ID, ROLE)
 VALUES (1, 'USER'),

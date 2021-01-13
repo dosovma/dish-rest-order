@@ -1,5 +1,7 @@
 package ru.dosov.restvoting.model;
 
+import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;

@@ -1,22 +1,24 @@
-package ru.dosov.restvoting.model;
+package ru.dosov.restvoting.model.AbstractEntity;
 
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class NamedEntity extends BaseEntity {
+
     @NotNull
-    @Length(min = 2, max = 256)
+    @Column(name = "name", nullable = false)
     protected String name;
 
-    public NamedEntity(Integer id, @NotNull @Length(min = 2, max = 256) String name) {
+    protected NamedEntity(Integer id, @NotNull @Length(min = 2, max = 256) String name) {
         super(id);
         this.name = name;
     }
 
-    public NamedEntity() {
+    protected NamedEntity() {
     }
 
     public String getName() {

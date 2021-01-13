@@ -1,17 +1,14 @@
 package ru.dosov.restvoting.model;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.SafeHtml;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
-
-import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
 @Entity
 @Table(name = "users")
@@ -29,6 +26,7 @@ public class User extends NamedEntity {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Vote> votes;
 
     @Enumerated(EnumType.STRING)
@@ -39,7 +37,7 @@ public class User extends NamedEntity {
 
     public User(
             Integer id,
-            @NotNull @Length(min = 2, max = 256) String name,
+            @NotNull String name,
             @Email @NotBlank @Size(max = 100) String email,
             @NotBlank @Size(min = 5, max = 100) String password,
             Set<Vote> votes,
@@ -53,7 +51,6 @@ public class User extends NamedEntity {
     }
 
     public User() {
-        super();
     }
 
     public String getEmail() {
@@ -94,7 +91,6 @@ public class User extends NamedEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", votes=" + votes +
                 ", roles=" + roles +
                 '}';
     }
