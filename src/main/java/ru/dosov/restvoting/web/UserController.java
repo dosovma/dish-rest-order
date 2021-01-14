@@ -5,18 +5,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dosov.restvoting.repository.UserRepository;
 
-@RestController
-@RequestMapping(value = "/users")
 public class UserController {
 
-    private final UserRepository repository;
+/*    private final UserRepository repository;
 
     @Autowired
     public UserController(UserRepository repository) {
         this.repository = repository;
     }
 
-/*    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@PathVariable Integer id) {
         return repository.getById(id);
     }*/

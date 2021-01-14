@@ -1,4 +1,6 @@
-api.version: v1
+appattributes:
+  api.version: v1
+  baseurl: /api/${appattributes.api.version}
 
 spring:
   jpa:
@@ -20,5 +22,5 @@ spring:
   h2.console.enabled: true
 
   data.rest:
-    basePath: /api/${api.version}
+    basePath: ${appattributes.baseurl}
     returnBodyOnCreate: true

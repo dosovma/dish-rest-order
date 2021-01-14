@@ -26,10 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final UserRepository userRepository;
+    private final AppConfig appConfig;
 
     @Autowired
-    public WebSecurityConfig(UserRepository userRepository) {
+    public WebSecurityConfig(UserRepository userRepository, AppConfig appConfig) {
         this.userRepository = userRepository;
+        this.appConfig = appConfig;
     }
 
     @Bean
@@ -50,8 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/v1/users/**").hasRole(Role.USER.name())
-                .antMatchers("/api/v1/**").hasRole(Role.ADMIN.name())
+                .antMatchers(appConfig.getBaseurl() + "/users/{\\d+}").hasRole(Role.USER.name())
+                .antMatchers("/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
