@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.dosov.restvoting.model.AbstractEntity.DatedEntity;
 
 import javax.persistence.*;
@@ -13,8 +14,9 @@ public class Vote extends DatedEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id")
+    @JsonBackReference
     private Restaurant restaurant;
 
     public Vote(Integer id, LocalDateTime date, User user, Restaurant restaurant) {

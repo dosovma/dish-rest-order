@@ -52,8 +52,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(appConfig.getBaseurl() + "/users/{\\d+}").hasRole(Role.USER.name())
-                .antMatchers("/**").hasRole(Role.ADMIN.name())
+                .antMatchers(appConfig.getBaseurl() + "/users/{\\d+}/**").hasRole(Role.USER.name())
+                .antMatchers(appConfig.getBaseurl() + "/restaurants").hasRole(Role.USER.name())
+                .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}").hasRole(Role.USER.name())
+                .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}/menus").hasRole(Role.USER.name())
+                .antMatchers(appConfig.getBaseurl() + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();

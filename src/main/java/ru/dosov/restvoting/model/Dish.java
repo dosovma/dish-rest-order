@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ public class Dish extends NamedEntity {
     private Double price;
 
     @ManyToMany(mappedBy = "dishes")
+    @JsonBackReference
     private Set<Menu> menus;
 
     public Dish(int id, String name, Double price, Set<Menu> menus) {

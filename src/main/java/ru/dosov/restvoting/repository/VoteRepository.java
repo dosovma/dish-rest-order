@@ -6,4 +6,5 @@ import ru.dosov.restvoting.model.Vote;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
+
 }

@@ -1,9 +1,11 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -13,10 +15,12 @@ import java.util.Set;
 @Table(name = "Restaurant")
 public class Restaurant extends NamedEntity {
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<Menu> menus;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<Vote> votes;
 
     public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name, Set<Menu> menus, Set<Vote> votes) {
