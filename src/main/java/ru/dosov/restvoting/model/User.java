@@ -1,6 +1,5 @@
 package ru.dosov.restvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.*;
@@ -25,10 +24,6 @@ public class User extends NamedEntity {
     @Size(min = 5, max = 100)
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private Set<Vote> votes;
-
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
@@ -40,13 +35,11 @@ public class User extends NamedEntity {
             @NotNull String name,
             @Email @NotBlank @Size(max = 100) String email,
             @NotBlank @Size(min = 5, max = 100) String password,
-            Set<Vote> votes,
             Set<Role> roles
     ) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.votes = votes;
         this.roles = roles;
     }
 
@@ -67,14 +60,6 @@ public class User extends NamedEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
     }
 
     public Set<Role> getRoles() {

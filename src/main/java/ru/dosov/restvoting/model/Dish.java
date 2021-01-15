@@ -3,10 +3,7 @@ package ru.dosov.restvoting.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -16,7 +13,7 @@ public class Dish extends NamedEntity {
     @Column(name = "price")
     private Double price;
 
-    @ManyToMany(mappedBy = "dishes")
+    @ManyToMany(mappedBy = "dishes", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Menu> menus;
 

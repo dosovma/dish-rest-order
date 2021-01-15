@@ -19,14 +19,9 @@ public class Restaurant extends NamedEntity {
     @JsonManagedReference
     private Set<Menu> menus;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private Set<Vote> votes;
-
-    public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name, Set<Menu> menus, Set<Vote> votes) {
+    public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name, Set<Menu> menus) {
         super(id, name);
         this.menus = menus;
-        this.votes = votes;
     }
 
     public Restaurant() {
@@ -40,21 +35,12 @@ public class Restaurant extends NamedEntity {
         this.menus = menus;
     }
 
-    public Set<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
-    }
-
     @Override
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", menus=" + menus +
-                ", votes=" + votes +
                 '}';
     }
 }

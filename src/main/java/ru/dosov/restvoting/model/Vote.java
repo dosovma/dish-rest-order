@@ -1,26 +1,36 @@
 package ru.dosov.restvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import ru.dosov.restvoting.model.AbstractEntity.DatedEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Value;
+import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "user_id", "date"}, name = "restaurant_user_date_unique_idx"))
-public class Vote extends DatedEntity {
+@Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}, name = "restaurant_user_date_unique_idx"))
+public class Vote extends BaseEntity {
+
+    @Value("${appattributes.deadline}")
+    @JsonIgnore
+    private LocalTime deadLine;
+
+    @Column(name = "date")
+    private LocalDateTime dateTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    //@JsonBackReference
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "rest_id")
-    @JsonBackReference
     private Restaurant restaurant;
 
     public Vote(Integer id, LocalDateTime date, User user, Restaurant restaurant) {
-        super(id, date);
+        super(id);
+        this.dateTime = date;
         this.user = user;
         this.restaurant = restaurant;
     }
@@ -43,6 +53,22 @@ public class Vote extends DatedEntity {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public LocalTime getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(LocalTime deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override

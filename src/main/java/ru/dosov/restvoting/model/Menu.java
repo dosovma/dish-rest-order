@@ -2,15 +2,18 @@ package ru.dosov.restvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import ru.dosov.restvoting.model.AbstractEntity.DatedEntity;
+import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 @Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "date"}, name = "restaurant_menu_unique_date_idx"))
-public class Menu extends DatedEntity {
+public class Menu extends BaseEntity {
+
+    @Column(name = "date")
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)
@@ -27,8 +30,8 @@ public class Menu extends DatedEntity {
     @JsonManagedReference
     private Set<Dish> dishes;
 
-    public Menu(Integer id, LocalDateTime date, Restaurant restaurant, Set<Dish> dishes) {
-        super(id, date);
+    public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {
+        super(id);
         this.restaurant = restaurant;
         this.dishes = dishes;
     }
@@ -50,6 +53,14 @@ public class Menu extends DatedEntity {
 
     public void setDishes(Set<Dish> dishes) {
         this.dishes = dishes;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
