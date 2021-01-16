@@ -18,8 +18,10 @@ public class ValidationUtil {
 
     public static void checkPermission(AuthUser authUser, Integer candidate_id) {
         User user = authUser.getUser();
-        if (!user.getId().equals(candidate_id) || !user.getRoles().contains(Role.ADMIN)) {
-            throw new ForbiddenException(user + "can't read, update or delete user with id = " + candidate_id);
+        if (!user.getId().equals(candidate_id)) {
+            if (!user.getRoles().contains(Role.ADMIN)) {
+                throw new ForbiddenException(user + " can't read, update or delete user with id = " + candidate_id);
+            }
         }
     }
 
