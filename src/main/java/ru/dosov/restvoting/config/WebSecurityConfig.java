@@ -52,6 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers(appConfig.getBaseurl() + "/account").anonymous()
+                .antMatchers(appConfig.getBaseurl() + "/account/{\\d+}").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/users/{\\d+}/**").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}").hasRole(Role.USER.name())

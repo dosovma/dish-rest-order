@@ -1,6 +1,8 @@
 package ru.dosov.restvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Value;
 import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
@@ -21,6 +23,7 @@ public class Vote extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     //@JsonBackReference
     private User user;
 

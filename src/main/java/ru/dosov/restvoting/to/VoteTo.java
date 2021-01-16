@@ -1,8 +1,10 @@
-package ru.dosov.restvoting;
+package ru.dosov.restvoting.to;
+
+import ru.dosov.restvoting.model.HasId;
 
 import java.time.LocalDateTime;
 
-public class VoteTo {
+public class VoteTo implements HasId<Integer> {
     private Integer id;
     private LocalDateTime dateTime;
     private Integer user_id;
@@ -18,10 +20,17 @@ public class VoteTo {
     public VoteTo() {
     }
 
+    @Override
+    public boolean isNew() {
+        return id == null;
+    }
+
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

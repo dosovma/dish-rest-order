@@ -1,7 +1,7 @@
 package ru.dosov.restvoting.Util;
 
-import ru.dosov.restvoting.VoteTo;
 import ru.dosov.restvoting.model.Vote;
+import ru.dosov.restvoting.to.VoteTo;
 
 import java.util.List;
 import java.util.stream.Collectors;

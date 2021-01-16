@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/restaurants")
 public class RestaurantController {
 
-    private RestaurantRepository restRepository;
+    private final RestaurantRepository restRepository;
 
     @Autowired
     public RestaurantController(RestaurantRepository restRepository) {
@@ -26,5 +26,4 @@ public class RestaurantController {
     public List<Restaurant> getAll(@RequestParam String date) {
         return restRepository.getAllRestaurantsWithDishes(LocalDate.parse(date));
     }
-
 }

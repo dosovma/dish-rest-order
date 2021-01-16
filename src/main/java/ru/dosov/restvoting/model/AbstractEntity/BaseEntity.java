@@ -2,13 +2,13 @@ package ru.dosov.restvoting.model.AbstractEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;
-import org.springframework.data.domain.Persistable;
+import ru.dosov.restvoting.model.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class BaseEntity implements Persistable<Integer> {
+public abstract class BaseEntity implements HasId<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,7 @@ public abstract class BaseEntity implements Persistable<Integer> {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
