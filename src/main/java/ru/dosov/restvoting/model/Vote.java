@@ -11,12 +11,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}, name = "restaurant_user_date_unique_idx"))
+@Table(name = "vote")
 public class Vote extends BaseEntity {
-
-    @Value("${appattributes.deadline}")
-    @JsonIgnore
-    private LocalTime deadLine;
 
     @Column(name = "date")
     private LocalDateTime dateTime;
@@ -24,7 +20,6 @@ public class Vote extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonBackReference
     private User user;
 
     @ManyToOne
@@ -56,14 +51,6 @@ public class Vote extends BaseEntity {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
-    }
-
-    public LocalTime getDeadLine() {
-        return deadLine;
-    }
-
-    public void setDeadLine(LocalTime deadLine) {
-        this.deadLine = deadLine;
     }
 
     public LocalDateTime getDateTime() {

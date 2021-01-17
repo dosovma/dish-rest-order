@@ -12,7 +12,7 @@ public class ValidationUtil {
 
     public static void checkNew(HasId<Integer> entity) {
         if (!entity.isNew()) {
-            throw new IllegalRequestDataException(entity + " must be new (id=null)");
+            throw new IllegalRequestDataException(entity + " must be new (id = null)");
         }
     }
 
@@ -29,19 +29,19 @@ public class ValidationUtil {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
-            throw new IllegalRequestDataException(entity + " must be with id=" + id);
+            throw new IllegalRequestDataException(entity + " must be with id = " + id);
         }
     }
 
     public static <T> T checkNotFound(T object, int id) {
         if (object == null) {
-            throw new NotFoundException("Not found entity with id=" + id);
+            throw new NotFoundException("Not found entity with id = " + id);
         }
         return object;
     }
 
     public static void checkNotFound(Boolean found, int id) {
-        if (found) {
+        if (!found) {
             throw new NotFoundException("Not found entity with id=" + id);
         }
     }

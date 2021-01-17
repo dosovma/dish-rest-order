@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 
 @Configuration
 
@@ -16,6 +17,8 @@ import java.sql.SQLException;
 public class AppConfig {
 
     private String baseurl;
+
+    public static LocalTime deadLine;
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2Server() throws SQLException {
@@ -28,5 +31,13 @@ public class AppConfig {
 
     public void setBaseurl(String baseurl) {
         this.baseurl = baseurl;
+    }
+
+    public static LocalTime getDeadLine() {
+        return deadLine;
+    }
+
+    public static void setDeadLine(LocalTime deadLine) {
+        AppConfig.deadLine = deadLine;
     }
 }

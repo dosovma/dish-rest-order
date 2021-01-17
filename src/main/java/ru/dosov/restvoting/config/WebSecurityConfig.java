@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(appConfig.getBaseurl() + "/restaurants").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}/menus").hasRole(Role.USER.name())
+                .antMatchers(appConfig.getBaseurl() + "/votes").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

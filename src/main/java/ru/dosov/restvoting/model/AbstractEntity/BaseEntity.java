@@ -1,7 +1,7 @@
 package ru.dosov.restvoting.model.AbstractEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.Hibernate;
+import org.springframework.data.util.ProxyUtils;
 import ru.dosov.restvoting.model.HasId;
 
 import javax.persistence.*;
@@ -42,7 +42,7 @@ public abstract class BaseEntity implements HasId<Integer> {
         if (this == o) {
             return true;
         }
-        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
+        if (o == null || !getClass().equals(ProxyUtils.getUserClass(o))) {
             return false;
         }
         BaseEntity that = (BaseEntity) o;
