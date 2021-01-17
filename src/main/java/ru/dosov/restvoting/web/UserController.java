@@ -11,7 +11,7 @@ import ru.dosov.restvoting.repository.UserRepository;
 import java.util.EnumSet;
 import java.util.List;
 
-import static ru.dosov.restvoting.Util.ValidationUtil.*;
+import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)

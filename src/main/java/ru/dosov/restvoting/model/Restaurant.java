@@ -24,6 +24,10 @@ public class Restaurant extends NamedEntity {
         this.menus = menus;
     }
 
+    public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name) {
+        this(id, name, Set.of());
+    }
+
     public Restaurant() {
     }
 
@@ -40,7 +44,6 @@ public class Restaurant extends NamedEntity {
         return "Restaurant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", menus=" + menus +
                 '}';
     }
 }

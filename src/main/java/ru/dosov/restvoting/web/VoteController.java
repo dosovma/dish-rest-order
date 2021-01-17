@@ -5,17 +5,17 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.dosov.restvoting.Util.VoteUtil;
 import ru.dosov.restvoting.config.AppConfig;
 import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.repository.RestaurantRepository;
 import ru.dosov.restvoting.repository.VoteRepository;
 import ru.dosov.restvoting.to.VoteTo;
+import ru.dosov.restvoting.util.VoteUtil;
 
 import java.util.List;
 
-import static ru.dosov.restvoting.Util.ValidationUtil.*;
-import static ru.dosov.restvoting.Util.VoteUtil.*;
+import static ru.dosov.restvoting.util.ValidationUtil.*;
+import static ru.dosov.restvoting.util.VoteUtil.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/votes")
@@ -37,7 +37,7 @@ public class VoteController {
         return getListTo(votes);
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public List<VoteTo> getAllByUser(@RequestParam("user") Integer user_id, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, user_id);
         List<Vote> votes = voteRepository.getAllByUserId(user_id);
@@ -62,7 +62,7 @@ public class VoteController {
     //TODO work with optional findById(id)
     @GetMapping(value = "/{id}")
     public VoteTo getVoteById(@PathVariable Integer id, @AuthenticationPrincipal AuthUser authUser) {
-        Vote vote = voteRepository.findById(id).get();
+        Vote vote = checkNotFound(voteRepository.findById(id).orElse(null), id);
         checkPermission(authUser, vote.getUser().getId());
         return VoteUtil.getTo(vote);
     }

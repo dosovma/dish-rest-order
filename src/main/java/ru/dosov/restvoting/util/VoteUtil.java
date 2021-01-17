@@ -1,8 +1,8 @@
-package ru.dosov.restvoting.Util;
+package ru.dosov.restvoting.util;
 
-import ru.dosov.restvoting.Util.exception.ForbiddenException;
 import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.to.VoteTo;
+import ru.dosov.restvoting.util.exception.ForbiddenException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
