@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dosov.restvoting.model.Vote;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
@@ -14,4 +16,8 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Modifying
     @Query("DELETE FROM Vote v WHERE v.id=:id")
     int delete(@Param("id") int id);
+
+    @Modifying
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:id")
+    List<Vote> getAllByUserId(@Param("id") int id);
 }

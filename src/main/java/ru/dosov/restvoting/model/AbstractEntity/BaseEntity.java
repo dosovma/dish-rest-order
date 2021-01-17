@@ -21,8 +21,8 @@ public abstract class BaseEntity implements HasId<Integer> {
     protected BaseEntity() {
     }
 
-    @Override
     @JsonIgnore
+    @Override
     public boolean isNew() {
         return id == null;
     }

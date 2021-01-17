@@ -1,8 +1,10 @@
 package ru.dosov.restvoting.to;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.dosov.restvoting.model.HasId;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class VoteTo implements HasId<Integer> {
     private Integer id;
@@ -21,6 +23,7 @@ public class VoteTo implements HasId<Integer> {
     }
 
     @Override
+    @JsonIgnore
     public boolean isNew() {
         return id == null;
     }
@@ -57,5 +60,20 @@ public class VoteTo implements HasId<Integer> {
 
     public void setRestaurant_id(Integer restaurant_id) {
         this.restaurant_id = restaurant_id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VoteTo)) return false;
+        VoteTo voteTo = (VoteTo) o;
+        return Objects.equals(id, voteTo.id) && Objects.equals(dateTime, voteTo.dateTime)
+                && Objects.equals(user_id, voteTo.user_id)
+                && Objects.equals(restaurant_id, voteTo.restaurant_id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dateTime, user_id, restaurant_id);
     }
 }

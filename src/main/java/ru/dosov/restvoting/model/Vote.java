@@ -1,14 +1,11 @@
 package ru.dosov.restvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.beans.factory.annotation.Value;
 import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "vote")
@@ -34,7 +31,6 @@ public class Vote extends BaseEntity {
     }
 
     public Vote() {
-        super();
     }
 
     public User getUser() {
@@ -65,6 +61,7 @@ public class Vote extends BaseEntity {
     public String toString() {
         return "Vote{" +
                 "id=" + id +
+                ", dateTime=" + dateTime +
                 ", user=" + user +
                 ", restaurant=" + restaurant +
                 '}';

@@ -1,7 +1,6 @@
 appattributes:
   api.version: v1
   baseurl: /api/${appattributes.api.version}
-  deadLine: 11:00:00
 
 spring:
   jpa:

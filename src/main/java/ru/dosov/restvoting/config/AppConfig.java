@@ -18,7 +18,7 @@ public class AppConfig {
 
     private String baseurl;
 
-    public static LocalTime deadLine;
+    public final static LocalTime DEAD_LINE = LocalTime.parse("11:00:00");
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2Server() throws SQLException {
@@ -31,13 +31,5 @@ public class AppConfig {
 
     public void setBaseurl(String baseurl) {
         this.baseurl = baseurl;
-    }
-
-    public static LocalTime getDeadLine() {
-        return deadLine;
-    }
-
-    public static void setDeadLine(LocalTime deadLine) {
-        AppConfig.deadLine = deadLine;
     }
 }

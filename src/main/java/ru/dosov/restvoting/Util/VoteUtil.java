@@ -1,8 +1,12 @@
 package ru.dosov.restvoting.Util;
 
+import ru.dosov.restvoting.Util.exception.ForbiddenException;
 import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.to.VoteTo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +19,17 @@ public class VoteUtil {
     }
 
     public static List<VoteTo> getListTo(List<Vote> votes) {
-        return votes.stream().map(VoteUtil::getTo).collect(Collectors.toList());
+        return votes == null
+                ? List.of()
+                : votes.stream().map(VoteUtil::getTo).collect(Collectors.toList());
+    }
+
+    public static void checkVoteTime(LocalDateTime voteDateTime, LocalTime deadLine) {
+        if (voteDateTime.toLocalDate().isBefore(LocalDate.now())) {
+            throw new ForbiddenException("Unfortunately you can't change or delete your old vote");
+        }
+        if (voteDateTime.toLocalTime().isAfter(deadLine)) {
+            throw new ForbiddenException("Unfortunately you can't change or delete your vote after " + deadLine);
+        }
     }
 }

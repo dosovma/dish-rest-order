@@ -56,6 +56,8 @@ Vote: id, datetime of creation, rest_id, user_id
 * валидация
 * обработка ошибок
 * кеширование
+* сортировка
+* Правка ролей юзера
 * N+1
 * каскады
 * Spring Data JPA использовать optional
