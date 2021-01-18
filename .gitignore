@@ -2,7 +2,6 @@ HELP.md
 WORK.md
 target/
 .gitignore
-*.md
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,6 +1,7 @@
-package ru.dosov.restvoting.web;
+package ru.dosov.restvoting.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.dosov.restvoting.model.Restaurant;
 import ru.dosov.restvoting.repository.RestaurantRepository;
@@ -31,7 +32,7 @@ public class RestaurantController {
         return restRepository.getAllRestaurantsWithDishes(LocalDate.parse(date));
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant create(@RequestBody Restaurant restaurant) {
         checkNew(restaurant);
         return restRepository.save(restaurant);

@@ -1,6 +1,7 @@
 package ru.dosov.restvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.validator.constraints.Length;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
@@ -13,19 +14,17 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Restaurant")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Restaurant extends NamedEntity {
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
-    @JsonManagedReference
     private Set<Menu> menus;
 
     public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name, Set<Menu> menus) {
         super(id, name);
         this.menus = menus;
-    }
-
-    public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name) {
-        this(id, name, Set.of());
     }
 
     public Restaurant() {

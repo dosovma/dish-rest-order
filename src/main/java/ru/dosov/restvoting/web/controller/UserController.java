@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.web;
+package ru.dosov.restvoting.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.repository.UserRepository;
+import ru.dosov.restvoting.web.AuthUser;
 
 import java.util.EnumSet;
 import java.util.List;

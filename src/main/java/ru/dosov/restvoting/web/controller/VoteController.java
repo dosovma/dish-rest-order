@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.web;
+package ru.dosov.restvoting.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,6 +11,7 @@ import ru.dosov.restvoting.repository.RestaurantRepository;
 import ru.dosov.restvoting.repository.VoteRepository;
 import ru.dosov.restvoting.to.VoteTo;
 import ru.dosov.restvoting.util.VoteUtil;
+import ru.dosov.restvoting.web.AuthUser;
 
 import java.util.List;
 
@@ -59,7 +60,6 @@ public class VoteController {
     }
 
 
-    //TODO work with optional findById(id)
     @GetMapping(value = "/{id}")
     public VoteTo getVoteById(@PathVariable Integer id, @AuthenticationPrincipal AuthUser authUser) {
         Vote vote = checkNotFound(voteRepository.findById(id).orElse(null), id);

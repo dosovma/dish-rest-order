@@ -1,7 +1,7 @@
 package ru.dosov.restvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
@@ -10,14 +10,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "date"}, name = "restaurant_menu_unique_date_idx"))
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Menu extends BaseEntity {
 
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rest_id", nullable = false)
-    @JsonBackReference
     private Restaurant restaurant;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -27,7 +29,6 @@ public class Menu extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "dish_id", referencedColumnName = "id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"dish_id", "menu_id"}, name = "dish_menu_unique")
     )
-    @JsonManagedReference
     private Set<Dish> dishes;
 
     public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {
