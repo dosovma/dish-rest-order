@@ -1,24 +1,25 @@
 package ru.dosov.restvoting.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vote")
 public class Vote extends BaseEntity {
 
+    @NotNull
     @Column(name = "date")
     private LocalDateTime dateTime;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "rest_id")
     private Restaurant restaurant;

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 
 @Entity
 @Table(name = "dish")
 public class Dish extends NamedEntity {
 
+    @Positive
     @Column(name = "price")
     private Double price;
 

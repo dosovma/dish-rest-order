@@ -2,10 +2,12 @@ package ru.dosov.restvoting.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.dosov.restvoting.model.Dish;
 import ru.dosov.restvoting.repository.DishRepository;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static ru.dosov.restvoting.util.ValidationUtil.*;
@@ -21,15 +23,16 @@ public class DishController {
         this.dishRepository = dishRepository;
     }
 
+    @Transactional
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Dish create(@Valid @RequestBody Dish dish) {
+        checkNew(dish);
+        return dishRepository.save(dish);
+    }
+
     @GetMapping
     public List<Dish> getAll() {
         return dishRepository.findAll();
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Dish create(@RequestBody Dish dish) {
-        checkNew(dish);
-        return dishRepository.save(dish);
     }
 
     @GetMapping(value = "/{id}")
@@ -37,12 +40,14 @@ public class DishController {
         return checkNotFound(dishRepository.findById(id).orElse(null), id);
     }
 
+    @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @RequestBody Dish dish) {
+    public void update(@PathVariable Integer id, @Valid @RequestBody Dish dish) {
         assureIdConsistent(dish, id);
         dishRepository.save(dish);
     }
 
+    @Transactional
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable Integer id) {
         checkNotFound(dishRepository.delete(id) != 0, id);

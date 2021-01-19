@@ -2,17 +2,23 @@ package ru.dosov.restvoting.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.dosov.restvoting.config.AppConfig;
 import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.repository.RestaurantRepository;
 import ru.dosov.restvoting.repository.VoteRepository;
 import ru.dosov.restvoting.to.VoteTo;
+import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
 import ru.dosov.restvoting.web.AuthUser;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.dosov.restvoting.util.ValidationUtil.*;
@@ -31,22 +37,9 @@ public class VoteController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @Secured(value = {"ROLE_ADMIN"})
-    @GetMapping
-    public List<VoteTo> getAll() {
-        List<Vote> votes = voteRepository.findAll();
-        return getListTo(votes);
-    }
-
-    @GetMapping(value = "/")
-    public List<VoteTo> getAllByUser(@RequestParam("user") Integer user_id, @AuthenticationPrincipal AuthUser authUser) {
-        checkPermission(authUser, user_id);
-        List<Vote> votes = voteRepository.getAllByUserId(user_id);
-        return getListTo(votes);
-    }
-
+    @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public VoteTo create(@RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo create(@Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
         checkNew(voteTo);
         checkPermission(authUser, voteTo.getUser_id());
         Vote vote = new Vote(
@@ -59,6 +52,21 @@ public class VoteController {
         return getTo(savedVote);
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
+    @GetMapping
+    public List<VoteTo> getAllByUserAndDate(
+            @RequestParam @Nullable Integer user,
+            @RequestParam @Nullable LocalDate start,
+            @RequestParam @Nullable LocalDate end
+    ) {
+        LocalDateTime startDay = DateTimeUtil.startDayOrMin(start);
+        LocalDateTime endDay = DateTimeUtil.startDayOrMin(end);
+        List<Vote> votes = user == null
+                ? voteRepository.getAllByDate(startDay, endDay)
+                : voteRepository.getAllByUserOrDate(user, startDay, endDay);
+        return getListTo(votes);
+    }
+
 
     @GetMapping(value = "/{id}")
     public VoteTo getVoteById(@PathVariable Integer id, @AuthenticationPrincipal AuthUser authUser) {
@@ -67,8 +75,9 @@ public class VoteController {
         return VoteUtil.getTo(vote);
     }
 
+    @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@PathVariable Integer id, @Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, voteTo.getUser_id());
         checkVoteTime(voteTo.getDateTime(), AppConfig.DEAD_LINE);
         assureIdConsistent(voteTo, id);
@@ -81,6 +90,7 @@ public class VoteController {
         voteRepository.save(vote);
     }
 
+    @Transactional
     @DeleteMapping(value = "/{vote_id}/")
     public void delete(@PathVariable Integer vote_id, @RequestParam("user") Integer user_id, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, user_id);

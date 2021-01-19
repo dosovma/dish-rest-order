@@ -14,12 +14,20 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     @Modifying
-    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id and m.date=:date")
-    List<Menu> getMenuByRestaurantAndDate(@Param("id") Integer id, @Param("date") LocalDate date);
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id and m.date>=:dateStart and m.date<=:dateEnd")
+    List<Menu> getMenuByRestaurantBetweenDate(@Param("id") Integer id, @Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+
+    @Modifying
+    @Query("SELECT m FROM Menu m WHERE m.date>=:dateStart and m.date<=:dateEnd")
+    List<Menu> getMenuBetweenDate(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
     @Modifying
     @Query("SELECT m FROM Menu m WHERE m.date=:date")
     List<Menu> getMenuByDate(@Param("date") LocalDate date);
+
+    @Modifying
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id and m.date=:date")
+    List<Menu> getMenuByRestaurantAndDate(@Param("id") Integer id, @Param("date") LocalDate date);
 
     @Transactional
     @Modifying

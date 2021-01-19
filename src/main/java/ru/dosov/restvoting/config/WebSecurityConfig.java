@@ -54,7 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(appConfig.getBaseurl() + "/account").anonymous()
                 .antMatchers(appConfig.getBaseurl() + "/account/{\\d+}").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/users/{\\d+}/**").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants/menus").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}/menus").hasRole(Role.USER.name())
                 .antMatchers(appConfig.getBaseurl() + "/votes/**").hasRole(Role.USER.name())

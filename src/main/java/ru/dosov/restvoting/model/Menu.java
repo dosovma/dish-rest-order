@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -15,9 +16,11 @@ import java.util.Set;
         property = "id")
 public class Menu extends BaseEntity {
 
+    @NotNull
     @Column(name = "date")
     private LocalDate date;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rest_id", nullable = false)
     private Restaurant restaurant;
