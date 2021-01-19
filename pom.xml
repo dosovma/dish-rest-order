@@ -12,7 +12,7 @@
     <artifactId>rest-rating</artifactId>
     <version>0.1</version>
     <name>rest-rating</name>
-    <description>Test project for Spring Boot to get a job</description>
+    <description>Test project on Spring Boot to get a job</description>
 
     <properties>
         <java.version>15</java.version>
@@ -38,6 +38,10 @@
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

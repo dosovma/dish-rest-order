@@ -32,6 +32,7 @@ public class Menu extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "dish_id", referencedColumnName = "id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"dish_id", "menu_id"}, name = "dish_menu_unique")
     )
+    @OrderBy("id DESC")
     private Set<Dish> dishes;
 
     public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {

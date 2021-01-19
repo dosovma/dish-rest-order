@@ -1,27 +1,34 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.util.StringUtils;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Set;
+
+import org.hibernate.annotations.Cache;
+import ru.dosov.restvoting.util.JsonDeserializers;
 
 @Entity
 @Table(name = "users")
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends NamedEntity {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
-    @NotBlank
+    @NotEmpty
     @Size(max = 100)
     private String email;
 
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonDeserialize(using = JsonDeserializers.PasswordDeserializer.class)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -52,7 +59,7 @@ public class User extends NamedEntity {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = StringUtils.hasText(email) ? email.toLowerCase() : null;
     }
 
     public String getPassword() {

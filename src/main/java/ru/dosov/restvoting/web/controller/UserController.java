@@ -32,11 +32,13 @@ public class UserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User create(@Valid @RequestBody User user) {
         checkNew(user);
-        user.setRoles(EnumSet.of(Role.USER));
+        if (user.getRoles() == null) {
+            user.setRoles(EnumSet.of(Role.USER));
+        }
         return userRepository.save(user);
     }
 
-    @Cacheable("users")
+    @Cacheable(value = "users")
     @GetMapping
     public List<User> getAll() {
         return userRepository.findAll();
@@ -48,6 +50,7 @@ public class UserController {
         return checkNotFound(userRepository.findById(id).orElse(null), id);
     }
 
+    //TODO do update without password in body
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

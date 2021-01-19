@@ -83,6 +83,7 @@ public class AccountController {
     public void update(@PathVariable Integer id, @Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         assureIdConsistent(user, id);
+        user.setRoles(EnumSet.of(Role.USER));
         userRepository.save(user);
     }
 
