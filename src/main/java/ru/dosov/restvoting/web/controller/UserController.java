@@ -5,7 +5,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import ru.dosov.restvoting.config.WebSecurityConfig;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.repository.UserRepository;
@@ -54,8 +56,12 @@ public class UserController {
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @Valid @RequestBody User user) {
+    public void update(@PathVariable Integer id, @RequestBody User user) {
         assureIdConsistent(user, id);
+        String password = user.getPassword();
+        if (StringUtils.hasText(password)) {
+            user.setPassword(WebSecurityConfig.PASSWORD_ENCODER.encode(password));
+        }
         userRepository.save(user);
     }
 
