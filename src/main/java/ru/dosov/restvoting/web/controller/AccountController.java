@@ -7,7 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import ru.dosov.restvoting.config.WebSecurityConfig;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.model.Vote;
@@ -61,10 +63,12 @@ public class AccountController {
     public List<VoteTo> getVoteByDate(
             @PathVariable Integer id,
             @RequestParam @Nullable LocalDate start,
-            @RequestParam @Nullable LocalDate end
+            @RequestParam @Nullable LocalDate end,
+            @AuthenticationPrincipal AuthUser authUser
     ) {
+        checkPermission(authUser, id);
         LocalDateTime startDay = DateTimeUtil.startDayOrMin(start);
-        LocalDateTime endDay = DateTimeUtil.startDayOrMin(end);
+        LocalDateTime endDay = DateTimeUtil.endDayOrMax(end);
         List<Vote> votes = voteRepository.getAllByUserOrDate(id, startDay, endDay);
         return getListTo(votes);
     }
@@ -73,7 +77,7 @@ public class AccountController {
     @GetMapping(value = "/{user_id}/votes/{vote_id}")
     public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @PathVariable("user_id") Integer id, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
-        Vote vote = checkNotFound(voteRepository.findById(id).orElse(null), id);
+        Vote vote = checkNotFound(voteRepository.getVoteByIdAndUser(id, vote_id).orElse(null), vote_id);
         return VoteUtil.getTo(vote);
     }
 
@@ -83,6 +87,10 @@ public class AccountController {
     public void update(@PathVariable Integer id, @Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         assureIdConsistent(user, id);
+        String password = user.getPassword();
+        if (StringUtils.hasText(password)) {
+            user.setPassword(WebSecurityConfig.PASSWORD_ENCODER.encode(password));
+        }
         user.setRoles(EnumSet.of(Role.USER));
         userRepository.save(user);
     }

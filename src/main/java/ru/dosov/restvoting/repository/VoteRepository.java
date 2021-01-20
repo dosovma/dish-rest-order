@@ -9,6 +9,7 @@ import ru.dosov.restvoting.model.Vote;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
@@ -25,4 +26,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Modifying
     @Query("SELECT v FROM Vote v WHERE v.dateTime <=: dateEnd and v.dateTime >=: dateStart ORDER BY v.dateTime DESC")
     List<Vote> getAllByDate(@Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
+
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:user_id and v.id=:vote_id")
+    Optional<Vote> getVoteByIdAndUser(@Param("user_id") Integer user_id, @Param("vote_id") Integer vote_id);
 }

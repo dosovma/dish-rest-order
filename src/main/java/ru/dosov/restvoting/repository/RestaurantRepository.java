@@ -9,17 +9,16 @@ import ru.dosov.restvoting.model.Restaurant;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    @Modifying
     @Query("SELECT r FROM Restaurant r JOIN FETCH r.menus m WHERE m.date=:date")
     List<Restaurant> getAllRestaurantsWithDishes(@Param("date") LocalDate date);
 
-    @Modifying
     @Query("SELECT r FROM Restaurant r JOIN FETCH r.menus m WHERE m.date=:date and r.id=:id")
-    Restaurant getRestaurantWithDishes(@Param("date") LocalDate date, @Param("id") Integer id);
+    Optional<Restaurant> getRestaurantWithDishes(@Param("date") LocalDate date, @Param("id") Integer id);
 
     @Transactional
     @Modifying

@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.dosov.restvoting.model.Restaurant;
 import ru.dosov.restvoting.repository.RestaurantRepository;
+import ru.dosov.restvoting.util.DateTimeUtil;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -36,20 +38,16 @@ public class RestaurantController {
 
     @Cacheable("restaurants")
     @GetMapping
-    public List<Restaurant> getAll() {
-        return restRepository.findAll();
+    public List<Restaurant> getAllWithDishes(@RequestParam @Nullable LocalDate menuDate) {
+        LocalDate dateToMenu = DateTimeUtil.checkFillDateForMenu(menuDate);
+        return restRepository.getAllRestaurantsWithDishes(dateToMenu);
     }
 
     @Cacheable("restaurants")
-    @GetMapping(value = "/menus")
-    public List<Restaurant> getAllWithDishes(@RequestParam String date) {
-        return restRepository.getAllRestaurantsWithDishes(LocalDate.parse(date));
-    }
-
-    @Cacheable("restaurants")
-    @GetMapping(value = {"/{id}/menus"})
-    public Restaurant getRestaurantWithDishes(@PathVariable Integer id, @RequestParam String date) {
-        return restRepository.getRestaurantWithDishes(LocalDate.parse(date), id);
+    @GetMapping(value = {"/{id}"})
+    public Restaurant getRestaurantWithDishes(@PathVariable Integer id, @RequestParam @Nullable LocalDate menuDate) {
+        LocalDate dateToMenu = DateTimeUtil.checkFillDateForMenu(menuDate);
+        return checkNotFound(restRepository.getRestaurantWithDishes(menuDate, id).orElse(null), id);
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)

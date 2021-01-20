@@ -52,11 +52,10 @@ public class UserController {
         return checkNotFound(userRepository.findById(id).orElse(null), id);
     }
 
-    //TODO do update without password in body
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @RequestBody User user) {
+    public void update(@PathVariable Integer id, @Valid @RequestBody User user) {
         assureIdConsistent(user, id);
         String password = user.getPassword();
         if (StringUtils.hasText(password)) {
