@@ -12,9 +12,9 @@ import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.repository.RestaurantRepository;
 import ru.dosov.restvoting.repository.VoteRepository;
 import ru.dosov.restvoting.to.VoteTo;
+import ru.dosov.restvoting.util.AuthUser;
 import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
-import ru.dosov.restvoting.web.AuthUser;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.dosov.restvoting.util.ValidationUtil.*;
-import static ru.dosov.restvoting.util.VoteUtil.*;
+import static ru.dosov.restvoting.util.VoteUtil.getListTo;
+import static ru.dosov.restvoting.util.VoteUtil.getTo;
 
 @RestController
 @RequestMapping(value = "/api/v1/votes")
@@ -42,9 +43,10 @@ public class VoteController {
     public VoteTo create(@Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
         checkNew(voteTo);
         checkPermission(authUser, voteTo.getUser_id());
+        LocalDateTime voteDateTime = DateTimeUtil.fillVoteDate(voteTo.getDateTime());
         Vote vote = new Vote(
                 null,
-                voteTo.getDateTime(),
+                voteDateTime,
                 authUser.getUser(),
                 restaurantRepository.getOne(voteTo.getRestaurant_id())
         );
@@ -59,8 +61,8 @@ public class VoteController {
             @RequestParam @Nullable LocalDate start,
             @RequestParam @Nullable LocalDate end
     ) {
-        LocalDateTime startDay = DateTimeUtil.startDayOrMin(start);
-        LocalDateTime endDay = DateTimeUtil.startDayOrMin(end);
+        LocalDateTime startDay = DateTimeUtil.getDateTimeOrMin(start);
+        LocalDateTime endDay = DateTimeUtil.getDateTimeOrMax(end);
         List<Vote> votes = user == null
                 ? voteRepository.getAllByDate(startDay, endDay)
                 : voteRepository.getAllByUserOrDate(user, startDay, endDay);
@@ -79,11 +81,12 @@ public class VoteController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable Integer id, @Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, voteTo.getUser_id());
-        checkVoteTime(voteTo.getDateTime(), AppConfig.DEAD_LINE);
+        LocalDateTime voteDateTime = DateTimeUtil.fillVoteDate(voteTo.getDateTime());
+        checkVoteTime(voteDateTime, AppConfig.DEAD_LINE);
         assureIdConsistent(voteTo, id);
         Vote vote = new Vote(
                 id,
-                voteTo.getDateTime(),
+                voteDateTime,
                 authUser.getUser(),
                 restaurantRepository.getOne(voteTo.getRestaurant_id())
         );

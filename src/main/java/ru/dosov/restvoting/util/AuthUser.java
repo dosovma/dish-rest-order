@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.web;
+package ru.dosov.restvoting.util;
 
 import org.springframework.lang.NonNull;
 import ru.dosov.restvoting.model.User;

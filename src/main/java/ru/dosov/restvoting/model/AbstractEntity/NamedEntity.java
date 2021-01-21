@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 public abstract class NamedEntity extends BaseEntity {
 
     @NotBlank
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 100, message = "Name's size must be from 2 to 100")
     @Column(name = "name", nullable = false)
     protected String name;
 

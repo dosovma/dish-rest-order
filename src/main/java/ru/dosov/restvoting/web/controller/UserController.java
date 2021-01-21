@@ -29,6 +29,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    //TODO do @validated password length using databinder
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

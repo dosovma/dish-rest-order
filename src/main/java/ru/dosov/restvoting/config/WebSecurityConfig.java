@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.repository.UserRepository;
-import ru.dosov.restvoting.web.AuthUser;
+import ru.dosov.restvoting.util.AuthUser;
 
 import java.util.Optional;
 

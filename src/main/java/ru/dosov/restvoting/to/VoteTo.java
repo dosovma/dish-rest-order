@@ -1,7 +1,7 @@
 package ru.dosov.restvoting.to;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ru.dosov.restvoting.model.HasId;
+import ru.dosov.restvoting.model.AbstractEntity.HasId;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

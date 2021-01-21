@@ -19,12 +19,10 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query("DELETE FROM Vote v WHERE v.id=:id")
     int delete(@Param("id") int id);
 
-    @Modifying
-    @Query("SELECT v FROM Vote v WHERE v.user.id=:id and v.dateTime <=:dateEnd and v.dateTime >=:dateStart ORDER BY v.dateTime DESC")
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:id and v.dateTime<=:dateEnd and v.dateTime>=:dateStart ORDER BY v.dateTime DESC")
     List<Vote> getAllByUserOrDate(@Param("id") int id, @Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
 
-    @Modifying
-    @Query("SELECT v FROM Vote v WHERE v.dateTime <=: dateEnd and v.dateTime >=: dateStart ORDER BY v.dateTime DESC")
+    @Query("SELECT v FROM Vote v WHERE v.dateTime<=:dateEnd and v.dateTime>=:dateStart ORDER BY v.dateTime DESC")
     List<Vote> getAllByDate(@Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
 
     @Query("SELECT v FROM Vote v WHERE v.user.id=:user_id and v.id=:vote_id")

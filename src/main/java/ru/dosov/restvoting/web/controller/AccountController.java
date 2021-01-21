@@ -7,18 +7,16 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import ru.dosov.restvoting.config.WebSecurityConfig;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.repository.UserRepository;
 import ru.dosov.restvoting.repository.VoteRepository;
 import ru.dosov.restvoting.to.VoteTo;
+import ru.dosov.restvoting.util.AuthUser;
 import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
-import ru.dosov.restvoting.web.AuthUser;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -67,8 +65,8 @@ public class AccountController {
             @AuthenticationPrincipal AuthUser authUser
     ) {
         checkPermission(authUser, id);
-        LocalDateTime startDay = DateTimeUtil.startDayOrMin(start);
-        LocalDateTime endDay = DateTimeUtil.endDayOrMax(end);
+        LocalDateTime startDay = DateTimeUtil.getDateTimeOrMin(start);
+        LocalDateTime endDay = DateTimeUtil.getDateTimeOrMax(end);
         List<Vote> votes = voteRepository.getAllByUserOrDate(id, startDay, endDay);
         return getListTo(votes);
     }
@@ -81,17 +79,23 @@ public class AccountController {
         return VoteUtil.getTo(vote);
     }
 
+    //TODO Check encode password
     @CacheEvict(value = "account", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable Integer id, @Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         assureIdConsistent(user, id);
-        String password = user.getPassword();
-        if (StringUtils.hasText(password)) {
-            user.setPassword(WebSecurityConfig.PASSWORD_ENCODER.encode(password));
+        User oldUser = authUser.getUser();
+        user.setRoles(oldUser.getRoles());
+        if (user.getPassword() == null) {
+            user.setPassword(oldUser.getPassword());
         }
-        user.setRoles(EnumSet.of(Role.USER));
+//        String password = user.getPassword();
+//        if (StringUtils.hasText(password)) {
+//            user.setPassword(WebSecurityConfig.PASSWORD_ENCODER.encode(password));
+//        }
+//        user.setRoles(EnumSet.of(Role.USER));
         userRepository.save(user);
     }
 

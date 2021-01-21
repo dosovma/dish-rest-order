@@ -45,8 +45,8 @@ public class MenuController {
 
     @GetMapping
     public List<MenuTo> getAllByRestaurant(@RequestParam @Nullable Integer restaurant, @RequestParam @Nullable LocalDate dateStart, @RequestParam @Nullable LocalDate dateEnd) {
-        LocalDate startDate = DateTimeUtil.startLocalDayOrMin(dateStart);
-        LocalDate endDate = DateTimeUtil.endLocalDayOrMax(dateEnd);
+        LocalDate startDate = DateTimeUtil.getDateOrMin(dateStart);
+        LocalDate endDate = DateTimeUtil.getDateOrMax(dateEnd);
         List<Menu> menus;
         if (dateStart == null && dateEnd == null) {
             menus = restaurant == null

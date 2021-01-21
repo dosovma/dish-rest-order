@@ -3,6 +3,8 @@ appattributes:
   baseurl: /api/${appattributes.api.version}
 
 spring:
+  messages:
+    basename: messages
   jpa:
     open-in-view: false
     show-sql: true

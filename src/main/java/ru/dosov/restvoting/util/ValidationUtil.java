@@ -1,21 +1,22 @@
 package ru.dosov.restvoting.util;
 
-import org.springframework.validation.BindingResult;
-import ru.dosov.restvoting.model.HasId;
+import ru.dosov.restvoting.model.AbstractEntity.HasId;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.util.exception.ForbiddenException;
 import ru.dosov.restvoting.util.exception.IllegalRequestDataException;
 import ru.dosov.restvoting.util.exception.NotFoundException;
-import ru.dosov.restvoting.web.AuthUser;
 
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ValidationUtil {
 
     public static void checkNew(HasId<Integer> entity) {
         if (!entity.isNew()) {
-            throw new IllegalRequestDataException(entity + " must be new (id = null)");
+            throw new IllegalRequestDataException(entity.getClass().getSimpleName() + " must be new (id = null)");
         }
     }
 
@@ -23,7 +24,7 @@ public class ValidationUtil {
         User user = authUser.getUser();
         if (!user.getId().equals(candidate_id)) {
             if (!user.getRoles().contains(Role.ADMIN)) {
-                throw new ForbiddenException(user + " can't read, update or delete user with id = " + candidate_id);
+                throw new ForbiddenException("User id=" + user.getId() + " can't read, update or delete user with id = " + candidate_id);
             }
         }
     }
@@ -32,7 +33,7 @@ public class ValidationUtil {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
-            throw new IllegalRequestDataException(entity + " must be with id = " + id);
+            throw new IllegalRequestDataException(entity.getClass().getSimpleName() + " must be with id = " + id);
         }
     }
 
@@ -49,6 +50,15 @@ public class ValidationUtil {
         }
     }
 
+    public static void checkVoteTime(LocalDateTime voteDateTime, LocalTime deadLine) {
+        if (voteDateTime.toLocalDate().isBefore(LocalDate.now())) {
+            throw new ForbiddenException("You can't change or delete your old vote");
+        }
+        if (voteDateTime.toLocalTime().isAfter(deadLine)) {
+            throw new ForbiddenException("You can't change or delete your vote after " + deadLine);
+        }
+    }
+
     public static Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;
@@ -59,9 +69,17 @@ public class ValidationUtil {
         return result;
     }
 
-    public static String getMessage(BindingResult result) {
-        return result.getFieldErrors().stream()
-                .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
-                .collect(Collectors.joining("<br>"));
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
+
+    public static Throwable logAndGetRootCause(HttpServletRequest req, Exception e) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+/*        if (logStackTrace) {
+            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+        }*/
+        return rootCause;
     }
 }

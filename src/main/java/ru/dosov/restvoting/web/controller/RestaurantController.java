@@ -39,14 +39,14 @@ public class RestaurantController {
     @Cacheable("restaurants")
     @GetMapping
     public List<Restaurant> getAllWithDishes(@RequestParam @Nullable LocalDate menuDate) {
-        LocalDate dateToMenu = DateTimeUtil.checkFillDateForMenu(menuDate);
+        LocalDate dateToMenu = DateTimeUtil.fillMenuDate(menuDate);
         return restRepository.getAllRestaurantsWithDishes(dateToMenu);
     }
 
     @Cacheable("restaurants")
     @GetMapping(value = {"/{id}"})
     public Restaurant getRestaurantWithDishes(@PathVariable Integer id, @RequestParam @Nullable LocalDate menuDate) {
-        LocalDate dateToMenu = DateTimeUtil.checkFillDateForMenu(menuDate);
+        LocalDate dateToMenu = DateTimeUtil.fillMenuDate(menuDate);
         return checkNotFound(restRepository.getRestaurantWithDishes(menuDate, id).orElse(null), id);
     }
 
