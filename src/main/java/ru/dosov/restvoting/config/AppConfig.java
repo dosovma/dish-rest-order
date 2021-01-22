@@ -3,7 +3,6 @@ package ru.dosov.restvoting.config;
 import org.h2.tools.Server;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -40,19 +39,19 @@ public class AppConfig {
     }
 
     @Bean
-    public MessageSource messageSource() {
+    public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("messages/app");
-        messageSource.setCacheSeconds(10);
+        messageSource.setBasename("classpath:/messages/messages");
+        messageSource.setCacheSeconds(600);
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setFallbackToSystemLocale(false);
-//        messageSource.setUseCodeAsDefaultMessage(true);
+        messageSource.setDefaultLocale(Locale.US);
         return messageSource;
     }
 
     @Bean
     public MessageSourceAccessor messageSourceAccessor() {
-        return new MessageSourceAccessor(messageSource(), Locale.ENGLISH);
+        return new MessageSourceAccessor(messageSource());
     }
 
     public String getBaseurl() {

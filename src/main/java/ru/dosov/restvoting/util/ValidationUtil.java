@@ -1,5 +1,7 @@
 package ru.dosov.restvoting.util;
 
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
@@ -7,10 +9,11 @@ import ru.dosov.restvoting.util.exception.ForbiddenException;
 import ru.dosov.restvoting.util.exception.IllegalRequestDataException;
 import ru.dosov.restvoting.util.exception.NotFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ValidationUtil {
 
@@ -69,17 +72,16 @@ public class ValidationUtil {
         return result;
     }
 
-    public static String getMessage(Throwable e) {
-        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
-    }
+    public static String buildErrorMessage(MethodArgumentNotValidException ex, MessageSourceAccessor messageSourceAccessor) {
+        Map<String, Object[]> errorMap = new HashMap<>();
+        ex.getAllErrors().forEach(error -> {
+            errorMap.put(error.getCode(), error.getArguments());
+        });
 
-    public static Throwable logAndGetRootCause(HttpServletRequest req, Exception e) {
-        Throwable rootCause = ValidationUtil.getRootCause(e);
-/*        if (logStackTrace) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
-        } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
-        }*/
-        return rootCause;
+        StringBuilder message = new StringBuilder();
+        for (Map.Entry<String, Object[]> entry : errorMap.entrySet()) {
+            message.append(messageSourceAccessor.getMessage(entry.getKey(), entry.getValue())).append(System.lineSeparator());
+        }
+        return message.toString();
     }
 }
