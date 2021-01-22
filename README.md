@@ -1,7 +1,7 @@
 # ПРИЛОЖЕНИЕ В РАЗРАБОТКЕ
 
-ver app 0.8
-ver readme 0.6
+ver app 0.9
+ver readme 0.8
 
 ### Resources
 * git - [https://github.com/dosovma/dish-rest-order](https://github.com/dosovma/dish-rest-order)
@@ -11,11 +11,19 @@ ver readme 0.6
 
 ## Functional
 
+### Еще Не реализовано:
+* тесты
+* cache hibernate
+* swagger
+* логирование
+* english version README.md
+
+### Реализовано:
 Голосование:
 * можно голосовать
 * посмотреть историю голосов
 * посмотреть конретный голос
-* full CRUD
+* CRUD
 
 Рестораны:
 * посмотреть все рестораны вместе с меню (едой)
@@ -36,22 +44,15 @@ ver readme 0.6
 * редактивароние своих данных, кроме роли (роли редактирует только админ)
 * удаление своего аккаунта (юзера)
 
-Еще Не реализовано:
-* тесты
-* cache hibernate
-* bugfix exceptionhandler
-* swagger
-* логирование
+## Project description
 
-## Description
-
-## Stack
+### Stack
 Spring Boot
 Spring MVC
 Spring Data JPA
 H2
 
-## Architecture
+### Architecture
 * DB
 * Model
 * Repository
@@ -70,7 +71,7 @@ H2
 
 Vote: id, datetime of creation, rest_id, user_id
 
-## Admin permissions
+### Admin permissions
 
 Admin:
 * CRUD users include role
@@ -79,7 +80,7 @@ Admin:
 * CRUD menus
 * CRUD votes
 
-# User permissions:
+### User permissions:
 
 Account:
 * регистрация (.../users post)
