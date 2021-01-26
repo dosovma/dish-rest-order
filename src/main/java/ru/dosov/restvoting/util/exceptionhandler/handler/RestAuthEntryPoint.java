@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 @Component
-public class RestAuthEntryPoint extends BasicAuthenticationEntryPoint {
+public class RestAuthEntryPoint implements AuthenticationEntryPoint {
 
     @SneakyThrows
     @Override
@@ -27,11 +27,5 @@ public class RestAuthEntryPoint extends BasicAuthenticationEntryPoint {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().write(json);
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        setRealmName("Baeldung");
-        super.afterPropertiesSet();
     }
 }

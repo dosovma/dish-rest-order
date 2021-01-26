@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -68,6 +69,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("error", HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
         body.put("message", messageError);
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
+    }
+
+    @ExceptionHandler({
+            AccessDeniedException.class
+    })
+    public ResponseEntity<Map<String, Object>> accessDenied(Exception ex, WebRequest request) {
+        Throwable e = ValidationUtil.getRootCause(ex);
+        Map<String, Object> body = errorAttributes.getErrorAttributes(request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        body.put("message", e.getMessage());
+        return ResponseEntity.status(status).body(body);
     }
 
     @ExceptionHandler({
