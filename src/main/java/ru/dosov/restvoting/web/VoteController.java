@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.web.controller;
+package ru.dosov.restvoting.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

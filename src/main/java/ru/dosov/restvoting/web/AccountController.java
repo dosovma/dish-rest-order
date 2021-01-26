@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.web.controller;
+package ru.dosov.restvoting.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -91,11 +91,6 @@ public class AccountController {
         if (user.getPassword() == null) {
             user.setPassword(oldUser.getPassword());
         }
-//        String password = user.getPassword();
-//        if (StringUtils.hasText(password)) {
-//            user.setPassword(WebSecurityConfig.PASSWORD_ENCODER.encode(password));
-//        }
-//        user.setRoles(EnumSet.of(Role.USER));
         userRepository.save(user);
     }
 
