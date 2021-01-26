@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.util.exception;
+package ru.dosov.restvoting.util.exceptionhandler.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.dosov.restvoting.util.ValidationUtil;
+import ru.dosov.restvoting.util.exceptionhandler.exception.AppException;
 
 import java.util.Map;
 

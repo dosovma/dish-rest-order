@@ -5,9 +5,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
-import ru.dosov.restvoting.util.exception.ForbiddenException;
-import ru.dosov.restvoting.util.exception.IllegalRequestDataException;
-import ru.dosov.restvoting.util.exception.NotFoundException;
+import ru.dosov.restvoting.util.exceptionhandler.exception.ForbiddenException;
+import ru.dosov.restvoting.util.exceptionhandler.exception.IllegalRequestDataException;
+import ru.dosov.restvoting.util.exceptionhandler.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

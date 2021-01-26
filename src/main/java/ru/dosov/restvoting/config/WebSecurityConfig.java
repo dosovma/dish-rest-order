@@ -16,9 +16,10 @@ import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.repository.UserRepository;
 import ru.dosov.restvoting.util.AuthUser;
+import ru.dosov.restvoting.util.exceptionhandler.handler.AccessDenyHandler;
+import ru.dosov.restvoting.util.exceptionhandler.handler.RestAuthEntryPoint;
 
 import java.util.Optional;
-
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final UserRepository userRepository;
     private final AppConfig appConfig;
+    private final RestAuthEntryPoint restAuthEntryPoint;
+    private final AccessDenyHandler accessDeniedHandler;
 
     @Autowired
-    public WebSecurityConfig(UserRepository userRepository, AppConfig appConfig) {
+    public WebSecurityConfig(UserRepository userRepository, AppConfig appConfig, RestAuthEntryPoint restAuthEntryPoint, AccessDenyHandler accessDeniedHandler) {
         this.userRepository = userRepository;
         this.appConfig = appConfig;
+        this.restAuthEntryPoint = restAuthEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -63,5 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        http.exceptionHandling().authenticationEntryPoint(restAuthEntryPoint);
     }
 }

@@ -16,7 +16,7 @@ ver readme 0.8
 * cache hibernate
 * swagger
 * логирование
-* english version README.md
+* english version of README.md
 
 ### Реализовано:
 Голосование:

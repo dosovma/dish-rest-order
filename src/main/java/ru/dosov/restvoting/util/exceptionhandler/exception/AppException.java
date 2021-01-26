@@ -1,4 +1,4 @@
-package ru.dosov.restvoting.util.exception;
+package ru.dosov.restvoting.util.exceptionhandler.exception;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
