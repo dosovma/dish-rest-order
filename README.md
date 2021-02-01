@@ -1,20 +1,29 @@
 # ПРИЛОЖЕНИЕ В РАЗРАБОТКЕ
 
 ver app 0.9
-ver readme 0.8
+ver readme 0.9
 
 ### Resources
 * git - [https://github.com/dosovma/dish-rest-order](https://github.com/dosovma/dish-rest-order)
 
 ## REST documentation
-[REST documentation (in develop)](https://documenter.getpostman.com/view/13586382/TVzYeZBP#83fedd18-83bc-4d5f-966b-bf59cfe3f65f)
+* [Swagger](http://localhost:8080/swagger-ui/)
+* [REST documentation by postman (in develop)](https://documenter.getpostman.com/view/13586382/TVzYeZBP#83fedd18-83bc-4d5f-966b-bf59cfe3f65f)
+
+### Auth details:
+#### Admin:
+- login - admin@mail.ru
+- password - adminpassword
+
+#### User:
+- login - mike@mail.ru
+- password - mikepassword
 
 ## Functional
 
 ### Еще Не реализовано:
 * тесты
 * cache hibernate
-* swagger
 * логирование
 * english version of README.md
 

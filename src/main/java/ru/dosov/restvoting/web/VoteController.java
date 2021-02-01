@@ -15,6 +15,7 @@ import ru.dosov.restvoting.to.VoteTo;
 import ru.dosov.restvoting.util.AuthUser;
 import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ import static ru.dosov.restvoting.util.VoteUtil.getListTo;
 import static ru.dosov.restvoting.util.VoteUtil.getTo;
 
 @RestController
-@RequestMapping(value = "/api/v1/votes")
+@RequestMapping(value = "${appattributes.baseurl}/votes")
 public class VoteController {
 
     private final VoteRepository voteRepository;
@@ -40,7 +41,7 @@ public class VoteController {
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public VoteTo create(@Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo create(@Valid @RequestBody VoteTo voteTo, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkNew(voteTo);
         checkPermission(authUser, voteTo.getUser_id());
         LocalDateTime voteDateTime = DateTimeUtil.fillVoteDate(voteTo.getDateTime());
@@ -71,7 +72,7 @@ public class VoteController {
 
 
     @GetMapping(value = "/{id}")
-    public VoteTo getVoteById(@PathVariable Integer id, @AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo getVoteById(@PathVariable Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         Vote vote = checkNotFound(voteRepository.findById(id).orElse(null), id);
         checkPermission(authUser, vote.getUser().getId());
         return VoteUtil.getTo(vote);
@@ -79,7 +80,7 @@ public class VoteController {
 
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @Valid @RequestBody VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@PathVariable Integer id, @Valid @RequestBody VoteTo voteTo, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, voteTo.getUser_id());
         LocalDateTime voteDateTime = DateTimeUtil.fillVoteDate(voteTo.getDateTime());
         checkVoteTime(voteDateTime, AppConfig.DEAD_LINE);

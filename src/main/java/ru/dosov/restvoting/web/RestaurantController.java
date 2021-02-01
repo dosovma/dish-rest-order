@@ -18,7 +18,7 @@ import java.util.List;
 import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/restaurants")
+@RequestMapping(value = "${appattributes.baseurl}/restaurants")
 public class RestaurantController {
 
     private final RestaurantRepository restRepository;

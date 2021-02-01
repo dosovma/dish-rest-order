@@ -19,7 +19,7 @@ import java.util.List;
 import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${appattributes.baseurl}/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private final UserRepository userRepository;

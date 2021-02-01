@@ -17,6 +17,7 @@ import ru.dosov.restvoting.to.VoteTo;
 import ru.dosov.restvoting.util.AuthUser;
 import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ import static ru.dosov.restvoting.util.ValidationUtil.*;
 import static ru.dosov.restvoting.util.VoteUtil.getListTo;
 
 @RestController
-@RequestMapping(value = "/api/v1/account")
+@RequestMapping(value = "${appattributes.baseurl}/account")
 public class AccountController {
 
     private final UserRepository userRepository;
@@ -51,7 +52,7 @@ public class AccountController {
 
     @Cacheable("account")
     @GetMapping(value = "/{id}")
-    public User getUserById(@PathVariable Integer id, @AuthenticationPrincipal AuthUser authUser) {
+    public User getUserById(@PathVariable Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         return checkNotFound(userRepository.findById(id).orElse(null), id);
     }
@@ -62,7 +63,7 @@ public class AccountController {
             @PathVariable Integer id,
             @RequestParam @Nullable LocalDate start,
             @RequestParam @Nullable LocalDate end,
-            @AuthenticationPrincipal AuthUser authUser
+            @ApiIgnore @AuthenticationPrincipal AuthUser authUser
     ) {
         checkPermission(authUser, id);
         LocalDateTime startDay = DateTimeUtil.getDateTimeOrMin(start);
@@ -73,7 +74,7 @@ public class AccountController {
 
     @Cacheable("account")
     @GetMapping(value = "/{user_id}/votes/{vote_id}")
-    public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @PathVariable("user_id") Integer id, @AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @PathVariable("user_id") Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         Vote vote = checkNotFound(voteRepository.getVoteByIdAndUser(id, vote_id).orElse(null), vote_id);
         return VoteUtil.getTo(vote);
@@ -83,7 +84,7 @@ public class AccountController {
     @CacheEvict(value = "account", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@PathVariable Integer id, @Valid @RequestBody User user, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         assureIdConsistent(user, id);
         User oldUser = authUser.getUser();
@@ -97,7 +98,7 @@ public class AccountController {
     @CacheEvict(value = "account", allEntries = true)
     @Transactional
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable("id") Integer id, @AuthenticationPrincipal AuthUser authUser) {
+    public void delete(@PathVariable("id") Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         checkPermission(authUser, id);
         checkNotFound(userRepository.delete(id) != 0, id);
     }

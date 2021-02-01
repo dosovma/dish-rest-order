@@ -13,7 +13,7 @@ import java.util.List;
 import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/dishes")
+@RequestMapping(value = "${appattributes.baseurl}/dishes")
 public class DishController {
 
     private final DishRepository dishRepository;

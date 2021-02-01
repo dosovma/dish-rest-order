@@ -1,6 +1,7 @@
 package ru.dosov.restvoting.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,14 +28,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final UserRepository userRepository;
-    private final AppConfig appConfig;
     private final RestAuthEntryPoint restAuthEntryPoint;
     private final AccessDenyHandler accessDeniedHandler;
 
+    @Value("${appattributes.baseurl}")
+    private String baseUrl;
+
+    private String[] userPermit = {
+            "/account/{\\d+}",
+            "/account/{\\d+}/votes",
+            "/account/{\\d+}/votes/{\\d+}",
+            "/restaurants",
+            "/restaurants/{\\d+}",
+            "/votes/**"
+    };
+
     @Autowired
-    public WebSecurityConfig(UserRepository userRepository, AppConfig appConfig, RestAuthEntryPoint restAuthEntryPoint, AccessDenyHandler accessDeniedHandler) {
+    public WebSecurityConfig(UserRepository userRepository, RestAuthEntryPoint restAuthEntryPoint, AccessDenyHandler accessDeniedHandler) {
         this.userRepository = userRepository;
-        this.appConfig = appConfig;
         this.restAuthEntryPoint = restAuthEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
     }
@@ -57,18 +68,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(appConfig.getBaseurl() + "/account").anonymous()
-                .antMatchers(appConfig.getBaseurl() + "/account/{\\d+}").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/account/{\\d+}/votes").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/account/{\\d+}/votes/{\\d+}").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/restaurants").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/restaurants/{\\d+}").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/votes/**").hasRole(Role.USER.name())
-                .antMatchers(appConfig.getBaseurl() + "/**").hasRole(Role.ADMIN.name())
+                .antMatchers(baseUrl + "/account").anonymous()
+                .antMatchers(getFullUrls(userPermit)).hasRole(Role.USER.name())
+                .antMatchers(baseUrl + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
         http.exceptionHandling().authenticationEntryPoint(restAuthEntryPoint);
+    }
+
+    private String[] getFullUrls(String...urls) {
+        for (int i = 0; i < urls.length; i++) {
+            urls[i] = baseUrl + urls[i];
+        }
+        return urls;
     }
 }

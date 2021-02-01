@@ -28,6 +28,6 @@ spring:
 
   h2.console.enabled: true
 
-  data.rest:
-    basePath: ${appattributes.baseurl}
-    returnBodyOnCreate: true
+#  data.rest:
+#    basePath: ${appattributes.baseurl}
+#    returnBodyOnCreate: true

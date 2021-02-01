@@ -20,7 +20,7 @@ import static ru.dosov.restvoting.util.MenuUtil.getTo;
 import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/menus")
+@RequestMapping(value = "${appattributes.baseurl}/menus")
 public class MenuController {
 
     private final MenuRepository menuRepository;
