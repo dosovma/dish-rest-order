@@ -16,12 +16,8 @@ public class DateTimeUtil {
     private DateTimeUtil() {
     }
 
-    public static LocalDate fillMenuDate(@Nullable LocalDate date) {
+    public static LocalDate getDateOrNow(@Nullable LocalDate date) {
         return date == null ? LocalDate.now() : date;
-    }
-
-    public static LocalDateTime fillVoteDate(@Nullable LocalDateTime dateTime) {
-        return dateTime == null ? LocalDateTime.now() : dateTime;
     }
 
     public static @Nullable
@@ -32,22 +28,22 @@ public class DateTimeUtil {
     }
 
     public static @Nullable
-    LocalDateTime getDateTimeOrMin(@Nullable LocalDate localDate) {
+    LocalDateTime getOrMinDateTime(@Nullable LocalDate localDate) {
         return localDate == null ? MIN_DATE : localDate.atTime(0, 0, 0);
     }
 
     public static @Nullable
-    LocalDateTime getDateTimeOrMax(@Nullable LocalDate localDate) {
+    LocalDateTime getOrMaxDateTime(@Nullable LocalDate localDate) {
         return localDate == null ? MAX_DATE : localDate.atTime(23, 59, 59);
     }
 
     public static @Nullable
-    LocalDate getDateOrMin(@Nullable LocalDate localDate) {
+    LocalDate getOrMinDate(@Nullable LocalDate localDate) {
         return localDate == null ? MIN_DATE.toLocalDate() : localDate;
     }
 
     public static @Nullable
-    LocalDate getDateOrMax(@Nullable LocalDate localDate) {
+    LocalDate getOrMaxDate(@Nullable LocalDate localDate) {
         return localDate == null ? MAX_DATE.toLocalDate() : localDate;
     }
 }

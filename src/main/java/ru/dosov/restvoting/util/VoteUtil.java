@@ -11,7 +11,7 @@ public class VoteUtil {
     }
 
     public static VoteTo getTo(Vote vote) {
-        return new VoteTo(vote.getId(), vote.getDateTime(), vote.getUser().getId(), vote.getRestaurant().getId());
+        return new VoteTo(vote.getId(), vote.getRestaurant().getId());
     }
 
     public static List<VoteTo> getListTo(List<Vote> votes) {

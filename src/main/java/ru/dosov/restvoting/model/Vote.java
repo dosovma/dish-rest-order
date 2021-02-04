@@ -4,15 +4,15 @@ import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "vote")
 public class Vote extends BaseEntity {
 
     @NotNull
-    @Column(name = "date")
-    private LocalDateTime dateTime;
+    @Column(name = "vote_date")
+    private LocalDate voteDate;
 
     @NotNull
     @ManyToOne
@@ -24,9 +24,9 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "rest_id")
     private Restaurant restaurant;
 
-    public Vote(Integer id, LocalDateTime date, User user, Restaurant restaurant) {
-        super(id);
-        this.dateTime = date;
+    public Vote(Integer id, LocalDate voteDate, User user, Restaurant restaurant) {
+        super(id, true);
+        this.voteDate = voteDate;
         this.user = user;
         this.restaurant = restaurant;
     }
@@ -50,19 +50,19 @@ public class Vote extends BaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getVoteDate() {
+        return voteDate;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setVoteDate(LocalDate voteDate) {
+        this.voteDate = voteDate;
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", dateTime=" + dateTime +
+                ", dateTime=" + voteDate +
                 ", user=" + user +
                 ", restaurant=" + restaurant +
                 '}';

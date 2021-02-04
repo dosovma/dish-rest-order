@@ -13,8 +13,12 @@ public abstract class BaseEntity implements HasId<Integer> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    protected BaseEntity(Integer id) {
+    @Column(name = "enabled", nullable = true)
+    protected Boolean enabled;
+
+    public BaseEntity(Integer id, Boolean enabled) {
         this.id = id;
+        this.enabled = enabled;
     }
 
     protected BaseEntity() {

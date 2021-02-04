@@ -1,13 +1,14 @@
 package ru.dosov.restvoting.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.dosov.restvoting.model.Role;
 import ru.dosov.restvoting.model.User;
 import ru.dosov.restvoting.model.Vote;
@@ -17,11 +18,12 @@ import ru.dosov.restvoting.to.VoteTo;
 import ru.dosov.restvoting.util.AuthUser;
 import ru.dosov.restvoting.util.DateTimeUtil;
 import ru.dosov.restvoting.util.VoteUtil;
+import ru.dosov.restvoting.util.exceptionhandler.exception.NotFoundException;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,58 +37,60 @@ public class AccountController {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
 
+    @Value(value = "${appattributes.baseurl}/account")
+    private String REST_URL;
+
     @Autowired
     public AccountController(UserRepository userRepository, VoteRepository voteRepository) {
         this.userRepository = userRepository;
         this.voteRepository = voteRepository;
     }
 
-    @CacheEvict(value = "account", allEntries = true)
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User create(@Valid @RequestBody User user) {
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
         checkNew(user);
         user.setRoles(EnumSet.of(Role.USER));
-        return userRepository.save(user);
+        User created = userRepository.save(user);
+
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Cacheable("account")
-    @GetMapping(value = "/{id}")
-    public User getUserById(@PathVariable Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        checkPermission(authUser, id);
-        return checkNotFound(userRepository.findById(id).orElse(null), id);
+    @GetMapping
+    public User getUserById(@ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+        int userId = authUser.id();
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found entity with id = " + userId));
     }
 
-    @Cacheable("account")
-    @GetMapping(value = "/{id}/votes")
+    @GetMapping(value = "/votes")
     public List<VoteTo> getVoteByDate(
-            @PathVariable Integer id,
             @RequestParam @Nullable LocalDate start,
             @RequestParam @Nullable LocalDate end,
             @ApiIgnore @AuthenticationPrincipal AuthUser authUser
     ) {
-        checkPermission(authUser, id);
-        LocalDateTime startDay = DateTimeUtil.getDateTimeOrMin(start);
-        LocalDateTime endDay = DateTimeUtil.getDateTimeOrMax(end);
-        List<Vote> votes = voteRepository.getAllByUserOrDate(id, startDay, endDay);
+        LocalDate startDay = DateTimeUtil.getOrMinDate(start);
+        LocalDate endDay = DateTimeUtil.getOrMaxDate(end);
+        List<Vote> votes = voteRepository.getAllByUserOrDate(authUser.id(), startDay, endDay);
         return getListTo(votes);
     }
 
-    @Cacheable("account")
-    @GetMapping(value = "/{user_id}/votes/{vote_id}")
-    public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @PathVariable("user_id") Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        checkPermission(authUser, id);
-        Vote vote = checkNotFound(voteRepository.getVoteByIdAndUser(id, vote_id).orElse(null), vote_id);
+    @GetMapping(value = "/votes/{vote_id}")
+    public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+        int userId = authUser.id();
+        Vote vote = voteRepository.getVoteByIdAndUser(userId, vote_id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + userId));
         return VoteUtil.getTo(vote);
     }
 
     //TODO Check encode password
-    @CacheEvict(value = "account", allEntries = true)
     @Transactional
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @Valid @RequestBody User user, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        checkPermission(authUser, id);
-        assureIdConsistent(user, id);
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void update(@Valid @RequestBody User user, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+        int userId = authUser.id();
+        assureIdConsistent(user, userId);
         User oldUser = authUser.getUser();
         user.setRoles(oldUser.getRoles());
         if (user.getPassword() == null) {
@@ -95,11 +99,10 @@ public class AccountController {
         userRepository.save(user);
     }
 
-    @CacheEvict(value = "account", allEntries = true)
     @Transactional
-    @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable("id") Integer id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        checkPermission(authUser, id);
-        checkNotFound(userRepository.delete(id) != 0, id);
+    @DeleteMapping
+    public void delete(@ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+        int userId = authUser.id();
+        checkNotFound(userRepository.delete(userId) != 0, userId);
     }
 }

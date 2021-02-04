@@ -1,22 +1,22 @@
-INSERT INTO DISH (NAME, PRICE)
-VALUES ('potato', 40.05),
-       ('pea soup', 35.00),
-       ('tea', 10.00),
-       ('bread', 5.10),
-       ('rice', 30.00),
-       ('buckwheat', 35.70),
-       ('oatmeal', 20.00),
-       ('meat', 45.00),
-       ('wine', 25.50),
-       ('salad', 27.60),
-       ('sandwich', 10.00),
-       ('meat soup', 12.00),
-       ('cabbage soup', 12.00),
-       ('steak well done', 50.50),
-       ('steak rare', 50.00),
-       ('schnitzel', 30.00),
-       ('beef', 46.30),
-       ('cake', 5.60);
+INSERT INTO DISH (NAME, PRICE, ENABLED)
+VALUES ('potato', 40.05, true),
+       ('pea soup', 35.00, true),
+       ('tea', 10.00, true),
+       ('bread', 5.10, true),
+       ('rice', 30.00, true),
+       ('buckwheat', 35.70, true),
+       ('oatmeal', 20.00, true),
+       ('meat', 45.00, true),
+       ('wine', 25.50, true),
+       ('salad', 27.60, true),
+       ('sandwich', 10.00, true),
+       ('meat soup', 12.00, true),
+       ('cabbage soup', 12.00, true),
+       ('steak well done', 50.50, true),
+       ('steak rare', 50.00, true),
+       ('schnitzel', 30.00, true),
+       ('beef', 46.30, true),
+       ('cake', 5.60, true);
 
 INSERT INTO USERS (NAME, EMAIL, PASSWORD)
 VALUES ('Mike', 'mike@mail.ru', '{noop}mikepassword'),
@@ -24,7 +24,7 @@ VALUES ('Mike', 'mike@mail.ru', '{noop}mikepassword'),
        ('Kate', 'kate@mail.ru', '{noop}katepassword'),
        ('Admin', 'admin@mail.ru', '{noop}adminpassword');
 
-INSERT INTO USER_ROLE (USER_ID, ROLE)
+INSERT INTO USER_ROLES (USER_ID, ROLES)
 VALUES (1, 'USER'),
        (2, 'USER'),
        (3, 'USER'),
@@ -36,7 +36,7 @@ VALUES ('White House'),
        ('ENOT'),
        ('Green tree');
 
-INSERT INTO MENU (DATE, REST_ID)
+INSERT INTO MENU (MENU_DATE, REST_ID)
 VALUES ('2021-01-12', 1),
        ('2021-01-12', 2),
        ('2021-01-12', 3),
@@ -66,12 +66,12 @@ VALUES (1, 1),
        (6, 13),
        (4, 3);
 
-INSERT INTO VOTE (DATE, REST_ID, USER_ID)
-VALUES ('2021-01-12 10:00:00', 1, 1),
-       ('2021-01-12 10:00:00', 1, 2),
-       ('2021-01-12 10:00:00', 3, 3),
-       ('2021-01-13 10:00:00', 2, 1),
-       ('2021-01-13 10:00:00', 2, 2),
-       ('2021-01-13 10:00:00', 1, 3);
+INSERT INTO VOTE (VOTE_DATE, REST_ID, USER_ID)
+VALUES ('2021-01-12', 1, 1),
+       ('2021-01-12', 1, 2),
+       ('2021-01-12', 3, 3),
+       ('2021-01-13', 2, 1),
+       ('2021-01-13', 2, 2),
+       ('2021-01-13', 1, 3);
 
 

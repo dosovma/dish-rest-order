@@ -10,22 +10,22 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "date"}, name = "restaurant_menu_unique_date_idx"))
+@Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "menu_date"}, name = "restaurant_menu_unique_date_idx"))
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class Menu extends BaseEntity {
 
     @NotNull
-    @Column(name = "date")
+    @Column(name = "menu_date")
     private LocalDate date;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)
     private Restaurant restaurant;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "dish_menu",
             joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"),
@@ -36,7 +36,7 @@ public class Menu extends BaseEntity {
     private Set<Dish> dishes;
 
     public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {
-        super(id);
+        super(id, true);
         this.restaurant = restaurant;
         this.dishes = dishes;
     }

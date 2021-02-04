@@ -23,6 +23,7 @@ spring:
 
   datasource:
     url: jdbc:h2:mem:restrating
+    #    url: jdbc:postgresql://localhost:5432/restrating
     username: sa
     password: password
 

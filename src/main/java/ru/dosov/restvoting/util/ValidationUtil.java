@@ -3,8 +3,7 @@ package ru.dosov.restvoting.util;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
-import ru.dosov.restvoting.model.Role;
-import ru.dosov.restvoting.model.User;
+import ru.dosov.restvoting.model.Vote;
 import ru.dosov.restvoting.util.exceptionhandler.exception.ForbiddenException;
 import ru.dosov.restvoting.util.exceptionhandler.exception.IllegalRequestDataException;
 import ru.dosov.restvoting.util.exceptionhandler.exception.NotFoundException;
@@ -23,28 +22,12 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkPermission(AuthUser authUser, Integer candidate_id) {
-        User user = authUser.getUser();
-        if (!user.getId().equals(candidate_id)) {
-            if (!user.getRoles().contains(Role.ADMIN)) {
-                throw new ForbiddenException("User id=" + user.getId() + " can't read, update or delete user with id = " + candidate_id);
-            }
-        }
-    }
-
     public static void assureIdConsistent(HasId<Integer> entity, int id) {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
             throw new IllegalRequestDataException(entity.getClass().getSimpleName() + " must be with id = " + id);
         }
-    }
-
-    public static <T> T checkNotFound(T object, int id) {
-        if (object == null) {
-            throw new NotFoundException("Not found entity with id = " + id);
-        }
-        return object;
     }
 
     public static void checkNotFound(Boolean found, int id) {
@@ -59,6 +42,13 @@ public class ValidationUtil {
         }
         if (voteDateTime.toLocalTime().isAfter(deadLine)) {
             throw new ForbiddenException("You can't change or delete your vote after " + deadLine);
+        }
+    }
+
+    public static void checkPermissionToWorkWithVote(Vote vote, AuthUser authUser) {
+        int userId = authUser.id();
+        if (vote.getUser().getId() != userId) {
+            throw new ForbiddenException("You can't work with vote with id = " + vote.getId());
         }
     }
 

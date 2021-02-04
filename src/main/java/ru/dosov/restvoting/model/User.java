@@ -1,17 +1,15 @@
 package ru.dosov.restvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.StringUtils;
 import ru.dosov.restvoting.model.AbstractEntity.NamedEntity;
+import ru.dosov.restvoting.util.JsonDeserializers;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Set;
-
-import org.hibernate.annotations.Cache;
-import ru.dosov.restvoting.util.JsonDeserializers;
 
 @Entity
 @Table(name = "users")
@@ -31,9 +29,9 @@ public class User extends NamedEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique")})
-    @Column(name = "role")
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "roles"}, name = "user_roles_unique")})
+    @Column(name = "roles")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
@@ -44,7 +42,7 @@ public class User extends NamedEntity {
             @NotBlank @Size(min = 5, max = 100) String password,
             Set<Role> roles
     ) {
-        super(id, name);
+        super(id, name, true);
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -75,6 +73,11 @@ public class User extends NamedEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @JsonIgnore
+    public Boolean getEnabled() {
+        return this.enabled;
     }
 
     @Override

@@ -34,12 +34,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${appattributes.baseurl}")
     private String baseUrl;
 
-    private String[] userPermit = {
+    private final String[] userPermit = {
             "/account/{\\d+}",
             "/account/{\\d+}/votes",
             "/account/{\\d+}/votes/{\\d+}",
             "/restaurants",
             "/restaurants/{\\d+}",
+            "/restaurants/{\\d+}/menus",
             "/votes/**"
     };
 
@@ -78,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().authenticationEntryPoint(restAuthEntryPoint);
     }
 
-    private String[] getFullUrls(String...urls) {
+    private String[] getFullUrls(String... urls) {
         for (int i = 0; i < urls.length; i++) {
             urls[i] = baseUrl + urls[i];
         }

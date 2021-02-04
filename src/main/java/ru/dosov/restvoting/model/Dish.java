@@ -13,14 +13,14 @@ public class Dish extends NamedEntity {
 
     @Positive
     @Column(name = "price")
-    private Double price;
+    private Long price;
 
-    @ManyToMany(mappedBy = "dishes", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "dishes", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Menu> menus;
 
-    public Dish(int id, String name, Double price, Set<Menu> menus) {
-        super(id, name);
+    public Dish(int id, String name, Long price, Set<Menu> menus, Boolean enable) {
+        super(id, name, enable);
         this.price = price;
         this.menus = menus;
     }
@@ -28,11 +28,11 @@ public class Dish extends NamedEntity {
     public Dish() {
     }
 
-    public Double getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -44,13 +44,17 @@ public class Dish extends NamedEntity {
         this.menus = menus;
     }
 
+    public void setEnable(Boolean enable) {
+        this.enabled = enable;
+    }
+
     @Override
     public String toString() {
         return "Dish{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", enable=" + enabled +
+                ", name='" + name +
                 ", price=" + price +
-                ", menus=" + menus +
                 '}';
     }
 }

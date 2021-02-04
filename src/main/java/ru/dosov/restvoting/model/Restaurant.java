@@ -17,12 +17,12 @@ import java.util.Set;
         property = "id")
 public class Restaurant extends NamedEntity {
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC")
     private Set<Menu> menus;
 
     public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name, Set<Menu> menus) {
-        super(id, name);
+        super(id, name, true);
         this.menus = menus;
     }
 
