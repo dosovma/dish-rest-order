@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.dosov</groupId>
     <artifactId>rest-rating</artifactId>
-    <version>0.1</version>
+    <version>1</version>
     <name>rest-rating</name>
     <description>Test project on Spring Boot to get a job</description>
 
@@ -82,6 +82,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

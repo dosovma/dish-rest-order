@@ -25,6 +25,12 @@ public class Dish extends NamedEntity {
         this.menus = menus;
     }
 
+    public Dish(int id, String name, Long price, Boolean enable) {
+        super(id, name, enable);
+        this.price = price;
+        this.menus = null;
+    }
+
     public Dish() {
     }
 

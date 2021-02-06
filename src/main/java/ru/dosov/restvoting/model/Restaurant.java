@@ -26,6 +26,11 @@ public class Restaurant extends NamedEntity {
         this.menus = menus;
     }
 
+    public Restaurant(Integer id, @NotNull @Length(min = 2, max = 256) String name) {
+        super(id, name, true);
+        this.menus = null;
+    }
+
     public Restaurant() {
     }
 
