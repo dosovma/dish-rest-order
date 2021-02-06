@@ -1,6 +1,6 @@
 # ПРИЛОЖЕНИЕ В РАЗРАБОТКЕ
 
-ver app 0.9
+ver app 1
 ver readme 0.9
 
 ### Resources
@@ -8,7 +8,7 @@ ver readme 0.9
 
 ## REST documentation
 * [Swagger](http://localhost:8080/swagger-ui/)
-* [REST documentation by postman (in develop)](https://documenter.getpostman.com/view/13586382/TVzYeZBP#83fedd18-83bc-4d5f-966b-bf59cfe3f65f)
+* [REST documentation by postman](https://documenter.getpostman.com/view/13586382/TVzYeZBP#83fedd18-83bc-4d5f-966b-bf59cfe3f65f)
 
 ### Auth details:
 #### Admin:
@@ -16,15 +16,19 @@ ver readme 0.9
 - password - adminpassword
 
 #### User:
+
 - login - mike@mail.ru
 - password - mikepassword
+
+
+- login - john@mail.ru
+- password - mjohnpassword
 
 ## Functional
 
 ### Еще Не реализовано:
 * тесты
 * cache hibernate
-* логирование
 * english version of README.md
 
 ### Реализовано:
@@ -41,6 +45,7 @@ ver readme 0.9
 
 Блюда:
 * CRUD
+* Активация/деактивация еды
 
 Юзеры (админ часть):
 * CRUD
@@ -67,18 +72,6 @@ H2
 * Repository
 * To and Util
 * RestController
-
-### Таблицы
-
-Юзер: ид(pk), имя, email, password, роль
-
-Еда: ид(pk), имя, прайс
-
-Ресторан: ид(pk), имя, лист меню
-
-Меню: ид(pk), дата, ресторан, лист еды
-
-Vote: id, datetime of creation, rest_id, user_id
 
 ### Admin permissions
 
@@ -109,12 +102,9 @@ Vote:
 
 ### Future feature
 * Выделения гранд админа и админа ресторана
-* Активация/деактивация еды
-* При обновлении меню проверять, чтобы в меню не правился ресторн, то есть только дата и блюда
 * Запрет редактирования меню и еды прошлых периодов для обычного админа, только гранд админ
 * Запретить удалять последнего админа - оставлять систему без админов
 * Запретить менять меню сеогдя после какого то времени, например 9-00
 * Запретить удалять меню
-* Запретить апдейт ресторая в меню
 * Нормальная смена/сброс пароля - через получение ссылки и введения нового пароля или через указание старого и нового пароля.
 Главное, чтобы пароль не отправлялся каждый раз в боди при апдейте.

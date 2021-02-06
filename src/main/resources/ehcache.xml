@@ -5,7 +5,7 @@
 
     <cache-template name="default">
         <expiry>
-            <ttl unit="seconds">30</ttl>
+            <ttl unit="seconds">300</ttl>
         </expiry>
 
         <listeners>

@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,6 +26,7 @@ import static ru.dosov.restvoting.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(value = "${appattributes.baseurl}/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class UserController {
 
     private final UserRepository userRepository;
@@ -46,21 +48,23 @@ public class UserController {
             user.setRoles(EnumSet.of(Role.USER));
         }
         User created = userRepository.save(user);
-
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
+        log.info("create new user {} by admin", user);
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @Cacheable(value = "users")
     @GetMapping
     public List<User> getAll() {
+        log.info("get all users by admin");
         return userRepository.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public User getById(@PathVariable Integer id) {
+    public User getOneById(@PathVariable Integer id) {
+        log.info("get user id {} by admin", id);
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
     }
 
@@ -69,6 +73,7 @@ public class UserController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable Integer id, @Valid @RequestBody User user) {
         assureIdConsistent(user, id);
+        log.info("update user id {} to {} by admin", id, user);
         User userFromDB = userRepository.getOne(id);
         userFromDB.setEmail(user.getEmail());
         userFromDB.setName(user.getName());
@@ -83,6 +88,7 @@ public class UserController {
     @Transactional
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Integer id) {
+        log.info("delete user id {} by admin", id);
         checkNotFound(userRepository.delete(id) != 0, id);
     }
 }

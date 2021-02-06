@@ -3,10 +3,12 @@ package ru.dosov.restvoting.to;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class VoteTo implements HasId<Integer> {
     private Integer id;
+    @NotNull
     private Integer restaurant_id;
 
     public VoteTo(Integer id, Integer restaurant_id) {

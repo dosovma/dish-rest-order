@@ -2,19 +2,21 @@ package ru.dosov.restvoting.to;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
-import ru.dosov.restvoting.model.Dish;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 public class MenuTo implements HasId<Integer> {
     private Integer id;
+    @NotNull
     private LocalDate date;
+    @NotNull
     private Integer restaurant_id;
-    private Set<Dish> dishes;
+    private Set<Integer> dishes;
 
-    public MenuTo(Integer id, LocalDate date, Integer restaurant_id, Set<Dish> dishes) {
+    public MenuTo(Integer id, LocalDate date, Integer restaurant_id, Set<Integer> dishes) {
         this.id = id;
         this.date = date;
         this.restaurant_id = restaurant_id;
@@ -56,11 +58,11 @@ public class MenuTo implements HasId<Integer> {
         this.restaurant_id = restaurant_id;
     }
 
-    public Set<Dish> getDishes() {
+    public Set<Integer> getDishes() {
         return dishes;
     }
 
-    public void setDishes(Set<Dish> dishes) {
+    public void setDishes(Set<Integer> dishes) {
         this.dishes = dishes;
     }
 

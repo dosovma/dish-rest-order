@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dosov.restvoting.model.Menu;
 import ru.dosov.restvoting.model.Vote;
 
 import java.time.LocalDate;
@@ -27,5 +28,8 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> getAllByDate(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
     @Query("SELECT v FROM Vote v WHERE v.user.id=:user_id and v.id=:vote_id")
-    Optional<Vote> getVoteByIdAndUser(@Param("user_id") Integer user_id, @Param("vote_id") Integer vote_id);
+    Optional<Vote> getOneByIdAndUser(@Param("user_id") Integer user_id, @Param("vote_id") Integer vote_id);
+
+    @Query("SELECT v FROM Vote v WHERE v.voteDate=:date and v.user.id=:user_id ORDER BY v.voteDate DESC")
+    List<Vote> getOneByDate(@Param("user_id") Integer user_id, @Param("date") LocalDate date);
 }

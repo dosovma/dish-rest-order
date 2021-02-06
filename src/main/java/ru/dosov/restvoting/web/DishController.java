@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -19,7 +20,8 @@ import static ru.dosov.restvoting.util.ValidationUtil.assureIdConsistent;
 import static ru.dosov.restvoting.util.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = "${appattributes.baseurl}/dishes")
+@RequestMapping(value = "${appattributes.baseurl}/dishes", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class DishController {
 
     private final DishRepository dishRepository;
@@ -36,21 +38,22 @@ public class DishController {
     public ResponseEntity<Dish> create(@Valid @RequestBody Dish dish) {
         checkNew(dish);
         Dish created = dishRepository.save(dish);
-
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
-
+        log.info("create new dish {}", dish);
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @GetMapping
     public List<Dish> getAll() {
+        log.info("get all dishes");
         return dishRepository.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Dish getById(@PathVariable Integer id) {
+    public Dish getOneById(@PathVariable Integer id) {
+        log.info("get dish id {}", id);
         return dishRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
     }
 
@@ -58,14 +61,15 @@ public class DishController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable Integer id, @Valid @RequestBody Dish dish) {
         assureIdConsistent(dish, id);
+        log.info("update dish id {} to {}", id, dish);
         dishRepository.save(dish);
     }
 
-    //TODO check if it works
     @Transactional
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable Integer id) {
         Dish dish = dishRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
         dish.setEnable(false);
+        log.info("delete dish id {}", id);
     }
 }

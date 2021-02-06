@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -33,7 +34,8 @@ import static ru.dosov.restvoting.util.VoteUtil.getListTo;
 import static ru.dosov.restvoting.util.VoteUtil.getTo;
 
 @RestController
-@RequestMapping(value = "${appattributes.baseurl}/votes")
+@RequestMapping(value = "${appattributes.baseurl}/votes", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class VoteController {
 
     private final VoteRepository voteRepository;
@@ -58,11 +60,10 @@ public class VoteController {
                 restaurantRepository.getOne(voteTo.getRestaurant_id())
         );
         Vote savedVote = voteRepository.save(vote);
-
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(savedVote.getId()).toUri();
-
+        log.info("create new vote {} by user id {}", vote, authUser.id());
         return ResponseEntity.created(uriOfNewResource).body(getTo(savedVote));
     }
 
@@ -78,13 +79,15 @@ public class VoteController {
         List<Vote> votes = user == null
                 ? voteRepository.getAllByDate(startDay, endDay)
                 : voteRepository.getAllByUserOrDate(user, startDay, endDay);
+        log.info("get vote history filtered by user or dates");
         return getListTo(votes);
     }
 
     @Secured(value = {"ROLE_ADMIN"})
     @GetMapping(value = "/{id}")
-    public VoteTo getVoteById(@PathVariable Integer id) {
+    public VoteTo getOneById(@PathVariable Integer id) {
         Vote vote = voteRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
+        log.info("get vote id {}", id);
         return VoteUtil.getTo(vote);
     }
 
@@ -96,6 +99,7 @@ public class VoteController {
         checkPermissionToWorkWithVote(vote, authUser);
         checkVoteTime(LocalDateTime.of(vote.getVoteDate(), LocalTime.now()), AppConfig.DEAD_LINE);
         vote.setRestaurant(restaurantRepository.getOne(voteTo.getRestaurant_id()));
+        log.info("update vote id {} to {} by user id {}", id, voteTo, authUser.id());
     }
 
     @Transactional
@@ -104,6 +108,7 @@ public class VoteController {
         Vote vote = voteRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
         checkPermissionToWorkWithVote(vote, authUser);
         checkVoteTime(LocalDateTime.of(vote.getVoteDate(), LocalTime.now()), AppConfig.DEAD_LINE);
+        log.info("delete vote id {}", id);
         voteRepository.delete(id);
     }
 }

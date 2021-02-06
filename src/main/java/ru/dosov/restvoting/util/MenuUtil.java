@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.util;
 
+import ru.dosov.restvoting.model.AbstractEntity.BaseEntity;
 import ru.dosov.restvoting.model.Menu;
 import ru.dosov.restvoting.to.MenuTo;
 
@@ -15,7 +16,7 @@ public class MenuUtil {
                 menu.getId(),
                 menu.getDate(),
                 menu.getRestaurant().getId(),
-                menu.getDishes()
+                menu.getDishes().stream().map(BaseEntity::getId).collect(Collectors.toSet())
         );
     }
 

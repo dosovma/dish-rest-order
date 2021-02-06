@@ -1,5 +1,6 @@
 package ru.dosov.restvoting.util.exceptionhandler.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -20,6 +21,7 @@ import ru.dosov.restvoting.util.exceptionhandler.exception.AppException;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private final ErrorAttributes errorAttributes;
     private final MessageSourceAccessor messageSourceAccessor;
@@ -27,7 +29,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Map<String, String> CONSTRAIN_MAP = Map.of(
             "users_email_idx", "exception.user.duplicateEmail",
             "date_rest_idx", "exception.restaurant.duplicateMenuDateTime",
-            "date_user_idx", "exception.vote.duplicateDateTime");
+            "date_user_idx", "exception.vote.duplicateDateTime",
+            "restaurant_idx", "exception.restaurant.duplicateName",
+            "dish_idx", "exception.dish.duplicateName"
+    );
 
     @Autowired
     public GlobalExceptionHandler(ErrorAttributes errorAttributes, MessageSourceAccessor messageSourceAccessor) {
@@ -41,6 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = ex.getStatus();
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
+        log.warn("{} at request  {}: {}", status.getReasonPhrase(), request.getDescription(false), ex.toString());
         return ResponseEntity.status(status).body(body);
     }
 
@@ -50,6 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("message", ValidationUtil.buildErrorMessage(ex, messageSourceAccessor));
+        log.warn("{} at request  {}: {}", status.getReasonPhrase(), request.getDescription(false), ex.toString());
         return ResponseEntity.status(status).body(body);
     }
 
@@ -68,6 +75,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("status", HttpStatus.UNPROCESSABLE_ENTITY.value());
         body.put("error", HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
         body.put("message", messageError);
+        log.warn("{} at request  {}: {}", HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), request.getDescription(false), e.toString());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
     }
 
@@ -81,6 +89,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("message", e.getMessage());
+        log.warn("{} at request  {}: {}", status.getReasonPhrase(), request.getDescription(false), e.toString());
         return ResponseEntity.status(status).body(body);
     }
 
@@ -94,6 +103,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("message", e.getMessage());
+        log.error(status.getReasonPhrase() + " at request " + request.getDescription(false), e);
         return ResponseEntity.status(status).body(body);
     }
 }

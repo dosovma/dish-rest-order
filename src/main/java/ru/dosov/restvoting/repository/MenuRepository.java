@@ -9,25 +9,25 @@ import ru.dosov.restvoting.model.Menu;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
-    @Modifying
-    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id and m.date>=:dateStart and m.date<=:dateEnd ORDER BY m.date DESC")
-    List<Menu> getMenuByRestaurantBetweenDate(@Param("id") Integer id, @Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+    @Query("SELECT DISTINCT m FROM Menu m JOIN FETCH m.dishes WHERE m.restaurant.id=:id and m.date>=:dateStart and m.date<=:dateEnd ORDER BY m.date DESC")
+    List<Menu> getAllByRestaurantBetweenDate(@Param("id") Integer id, @Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
-    @Modifying
-    @Query("SELECT m FROM Menu m WHERE m.date>=:dateStart and m.date<=:dateEnd ORDER BY m.date DESC")
-    List<Menu> getMenuBetweenDate(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+    @Query("SELECT DISTINCT m FROM Menu m JOIN FETCH m.dishes WHERE m.date>=:dateStart and m.date<=:dateEnd ORDER BY m.date DESC")
+    List<Menu> getAllBetweenDate(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
-    @Modifying
-    @Query("SELECT m FROM Menu m WHERE m.date=:date ORDER BY m.date DESC")
-    List<Menu> getMenuByDate(@Param("date") LocalDate date);
+    @Query("SELECT DISTINCT m FROM Menu m JOIN FETCH m.dishes WHERE m.date=:date ORDER BY m.date DESC")
+    List<Menu> getAllByDate(@Param("date") LocalDate date);
 
-    @Modifying
-    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:id and m.date=:date ORDER BY m.date DESC")
-    List<Menu> getMenuByRestaurantAndDate(@Param("id") Integer id, @Param("date") LocalDate date);
+    @Query("SELECT DISTINCT m FROM Menu m JOIN FETCH m.dishes WHERE m.restaurant.id=:id and m.date=:date ORDER BY m.date DESC")
+    List<Menu> getAllByRestaurantAndDate(@Param("id") Integer id, @Param("date") LocalDate date);
+
+    @Query("SELECT m FROM Menu m JOIN FETCH m.dishes WHERE m.id=:id")
+    Optional<Menu> getOneById(@Param("id") Integer id);
 
     @Transactional
     @Modifying

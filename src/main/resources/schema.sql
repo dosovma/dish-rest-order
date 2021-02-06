@@ -50,7 +50,7 @@ CREATE TABLE dish
     id      INTEGER AUTO_INCREMENT NOT NULL,
     name    VARCHAR                NOT NULL,
     price   INTEGER                NOT NULL,
-    enabled BOOL DEFAULT TRUE      NOT NULL,
+    enabled BOOL DEFAULT TRUE,
     CONSTRAINT dish_idx UNIQUE (name),
     PRIMARY KEY (id)
 );

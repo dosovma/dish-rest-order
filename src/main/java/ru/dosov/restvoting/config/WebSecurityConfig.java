@@ -34,10 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${appattributes.baseurl}")
     private String baseUrl;
 
-    private final String[] userPermit = {
-            "/account/{\\d+}",
-            "/account/{\\d+}/votes",
-            "/account/{\\d+}/votes/{\\d+}",
+    private final String[] userPermissions = {
+            "/account",
+            "/account/votes",
+            "/account/votes/{\\d+}",
             "/restaurants",
             "/restaurants/{\\d+}",
             "/restaurants/{\\d+}/menus",
@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            Optional<User> optionalUser = userRepository.getByEmail(email);
+            Optional<User> optionalUser = userRepository.getOneByEmail(email);
             return new AuthUser(optionalUser.orElseThrow(
                     () -> new UsernameNotFoundException("User '" + email + "' was not found")));
         };
@@ -69,8 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(baseUrl + "/account").anonymous()
-                .antMatchers(getFullUrls(userPermit)).hasRole(Role.USER.name())
+                .antMatchers(baseUrl + "/account/register").anonymous()
+                .antMatchers(getFullUrls(userPermissions)).hasRole(Role.USER.name())
                 .antMatchers(baseUrl + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

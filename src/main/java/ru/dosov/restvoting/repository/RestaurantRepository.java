@@ -14,11 +14,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    @Query("SELECT r FROM Restaurant r JOIN FETCH r.menus m WHERE m.date=:date")
-    List<Restaurant> getAllRestaurantsWithDishes(@Param("date") LocalDate date);
+    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menus m LEFT JOIN FETCH m.dishes WHERE m.date=:date")
+    List<Restaurant> getAllWithDishes(@Param("date") LocalDate date);
 
-    @Query("SELECT r FROM Restaurant r JOIN FETCH r.menus m WHERE m.date=:date and r.id=:id")
-    Optional<Restaurant> getRestaurantWithDishes(@Param("date") LocalDate date, @Param("id") Integer id);
+    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.menus m LEFT JOIN FETCH m.dishes WHERE m.date=:date and r.id=:id")
+    Optional<Restaurant> getOneWithDishes(@Param("date") LocalDate date, @Param("id") Integer id);
 
     @Transactional
     @Modifying
