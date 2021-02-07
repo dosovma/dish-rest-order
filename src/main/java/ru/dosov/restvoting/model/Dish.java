@@ -58,8 +58,8 @@ public class Dish extends NamedEntity {
     public String toString() {
         return "Dish{" +
                 "id=" + id +
-                ", enable=" + enabled +
-                ", name='" + name +
+                ", enabled=" + enabled +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 '}';
     }

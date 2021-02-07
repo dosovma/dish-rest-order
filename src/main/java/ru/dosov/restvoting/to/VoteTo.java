@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.dosov.restvoting.model.AbstractEntity.HasId;
 
 import javax.validation.constraints.NotNull;
+import java.beans.ConstructorProperties;
 import java.util.Objects;
 
 public class VoteTo implements HasId<Integer> {
@@ -11,6 +12,7 @@ public class VoteTo implements HasId<Integer> {
     @NotNull
     private Integer restaurant_id;
 
+    @ConstructorProperties({"id", "restaurant_id"})
     public VoteTo(Integer id, Integer restaurant_id) {
         this.id = id;
         this.restaurant_id = restaurant_id;

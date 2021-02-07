@@ -60,7 +60,7 @@ public class RestaurantController {
     @Cacheable(value = "restaurants", key = "'list'")
     @GetMapping
     public List<RestaurantTo> getAllWithoutMenus() {
-        log.info("get All restaurants");
+        log.info("get All restaurants without");
         return RestaurantUtil.getListTo(restRepository.findAll());
     }
 
@@ -74,6 +74,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}")
     public RestaurantTo getOneWithoutMenus(@PathVariable Integer id) {
+        log.info("get restaurant id {} without menus", id);
         return RestaurantUtil.getTo(restRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id)));
     }
 
@@ -81,7 +82,7 @@ public class RestaurantController {
     @GetMapping(value = {"/{id}/menus"})
     public Restaurant getOneWithMenus(@PathVariable Integer id, @RequestParam @Nullable LocalDate menuDate) {
         LocalDate dateToMenu = DateTimeUtil.getDateOrNow(menuDate);
-        log.info("get restaurant id {}", id);
+        log.info("get restaurant id {} with menu", id);
         return restRepository.getOneWithDishes(dateToMenu, id).orElseThrow(() -> {
             if (restRepository.getOne(id) != null) {
                 return new NotFoundException("Not found menu in this restaurant on date = " + dateToMenu);

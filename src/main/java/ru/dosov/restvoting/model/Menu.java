@@ -37,6 +37,7 @@ public class Menu extends BaseEntity {
 
     public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<Dish> dishes) {
         super(id, true);
+        this.date = date;
         this.restaurant = restaurant;
         this.dishes = dishes;
     }
@@ -72,6 +73,8 @@ public class Menu extends BaseEntity {
     public String toString() {
         return "Menu{" +
                 "id=" + id +
+                ", enabled=" + enabled +
+                ", date=" + date +
                 ", restaurant=" + restaurant +
                 ", dishes=" + dishes +
                 '}';
