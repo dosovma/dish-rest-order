@@ -14,7 +14,8 @@ import java.util.Set;
 //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = Restaurant.class)
 public class Restaurant extends NamedEntity {
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)

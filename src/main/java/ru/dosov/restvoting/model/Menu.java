@@ -13,7 +13,8 @@ import java.util.Set;
 @Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"rest_id", "menu_date"}, name = "restaurant_menu_unique_date_idx"))
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = Menu.class)
 public class Menu extends BaseEntity {
 
     @NotNull

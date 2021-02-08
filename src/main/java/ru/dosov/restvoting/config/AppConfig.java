@@ -16,7 +16,7 @@ import java.util.Locale;
 @Configuration
 public class AppConfig {
 
-    public final static LocalTime DEAD_LINE = LocalTime.parse("11:00:00");
+    public static LocalTime DEAD_LINE = LocalTime.parse("11:00:00");
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2Server() throws SQLException {

@@ -13,6 +13,7 @@ public class TestData {
     public final static LocalDate date2 = LocalDate.of(2021, 1, 13);
 
     public final static User user = new User(3, "Kate", "kate@mail.ru", "katepassword", EnumSet.of(Role.USER));
+    public final static User admin = new User(4, "Admin", "admin@mail.ru", "adminpassword", EnumSet.of(Role.ADMIN));
 
     public final static Dish dish1 = new Dish(1, "potato", 4005L, true);
     public final static Dish dish2 = new Dish(2, "pea soup", 3500L, true);

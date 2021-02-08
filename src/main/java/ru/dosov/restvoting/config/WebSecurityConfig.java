@@ -39,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/account/votes",
             "/account/votes/{\\d+}",
             "/restaurants",
+            "/restaurants/menus",
             "/restaurants/{\\d+}",
             "/restaurants/{\\d+}/menus",
             "/votes/**"

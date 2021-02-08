@@ -25,6 +25,7 @@ public class SpringFoxConfig {
                 .apis(RequestHandlerSelectors.basePackage("ru.dosov.restvoting.web"))
                 .paths(PathSelectors.any())
                 .build()
+                .ignoredParameterTypes()
                 .apiInfo(new ApiInfoBuilder()
                         .title("REST API documentation")
                         .description("Restaurant voting app")
