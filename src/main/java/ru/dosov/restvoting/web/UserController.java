@@ -3,8 +3,6 @@ package ru.dosov.restvoting.web;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +36,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    //TODO do @validated password length using databinder
-    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
@@ -55,7 +51,6 @@ public class UserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Cacheable(value = "users")
     @GetMapping
     public List<User> getAll() {
         log.info("get all users by admin");
@@ -68,7 +63,6 @@ public class UserController {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable Integer id, @Valid @RequestBody User user) {
@@ -84,7 +78,6 @@ public class UserController {
         userFromDB.setRoles(user.getRoles());
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Integer id) {

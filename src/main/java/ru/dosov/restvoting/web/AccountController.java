@@ -87,17 +87,12 @@ public class AccountController {
         return getListTo(votes);
     }
 
-    @GetMapping(value = "/votes/{vote_id}")
-    public VoteTo getVoteById(@PathVariable("vote_id") Integer vote_id, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+    @GetMapping(value = "/votes/{voteId}")
+    public VoteTo getVoteById(@PathVariable("voteId") Integer voteId, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
-        Vote vote = voteRepository.getOneByIdAndUser(userId, vote_id).orElseThrow(() -> {
-            if (userRepository.getOne(userId) != null) {
-                return new NotFoundException("Not found user with id = " + userId);
-            } else {
-                return new NotFoundException("Not found vote with id = " + vote_id);
-            }
-        });
-        log.info("user id {} get own vote by id {}", userId, vote_id);
+        Vote vote = voteRepository.getOneByIdAndUser(userId, voteId).
+                orElseThrow(() -> new NotFoundException("Not found user with vote id = " + voteId + " for user id " + userId));
+        log.info("user id {} get own vote by id {}", userId, voteId);
         return VoteUtil.getTo(vote);
     }
 

@@ -10,12 +10,12 @@ import java.util.Objects;
 public class VoteTo implements HasId<Integer> {
     private Integer id;
     @NotNull
-    private Integer restaurant_id;
+    private Integer restaurantId;
 
-    @ConstructorProperties({"id", "restaurant_id"})
-    public VoteTo(Integer id, Integer restaurant_id) {
+    @ConstructorProperties({"id", "restaurantId"})
+    public VoteTo(Integer id, Integer restaurantId) {
         this.id = id;
-        this.restaurant_id = restaurant_id;
+        this.restaurantId = restaurantId;
     }
 
     public VoteTo() {
@@ -37,12 +37,12 @@ public class VoteTo implements HasId<Integer> {
         this.id = id;
     }
 
-    public Integer getRestaurant_id() {
-        return restaurant_id;
+    public Integer getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurant_id(Integer restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setRestaurantId(Integer restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     @Override
@@ -50,11 +50,11 @@ public class VoteTo implements HasId<Integer> {
         if (this == o) return true;
         if (!(o instanceof VoteTo)) return false;
         VoteTo voteTo = (VoteTo) o;
-        return Objects.equals(id, voteTo.id) && Objects.equals(restaurant_id, voteTo.restaurant_id);
+        return Objects.equals(id, voteTo.id) && Objects.equals(restaurantId, voteTo.restaurantId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, restaurant_id);
+        return Objects.hash(id, restaurantId);
     }
 }

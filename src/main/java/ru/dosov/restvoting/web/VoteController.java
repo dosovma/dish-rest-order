@@ -22,14 +22,14 @@ import ru.dosov.restvoting.util.VoteUtil;
 import ru.dosov.restvoting.util.exceptionhandler.exception.NotFoundException;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.dosov.restvoting.util.ValidationUtil.*;
+import static ru.dosov.restvoting.util.ValidationUtil.checkPermissionToWorkWithVote;
+import static ru.dosov.restvoting.util.ValidationUtil.checkVoteTime;
 import static ru.dosov.restvoting.util.VoteUtil.getListTo;
 import static ru.dosov.restvoting.util.VoteUtil.getTo;
 
@@ -50,14 +50,13 @@ public class VoteController {
     }
 
     @Transactional
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> create(@Valid @RequestBody VoteTo voteTo, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        checkNew(voteTo);
+    @PostMapping
+    public ResponseEntity<VoteTo> create(@RequestParam("restaurant") Integer restaurantId, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
         Vote vote = new Vote(
                 null,
                 LocalDate.now(),
                 authUser.getUser(),
-                restaurantRepository.getOne(voteTo.getRestaurant_id())
+                restaurantRepository.getOne(restaurantId)
         );
         Vote savedVote = voteRepository.save(vote);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -85,21 +84,20 @@ public class VoteController {
 
     @Secured(value = {"ROLE_ADMIN"})
     @GetMapping(value = "/{id}")
-    public VoteTo getOneById(@PathVariable Integer id) {
+    public VoteTo getOneByVoteId(@PathVariable Integer id) {
         Vote vote = voteRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
         log.info("get vote id {}", id);
         return VoteUtil.getTo(vote);
     }
 
     @Transactional
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable Integer id, @Valid @RequestBody VoteTo voteTo, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
-        assureIdConsistent(voteTo, id);
-        Vote vote = voteRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found entity with id = " + id));
+    @PutMapping(value = "/{voteId}")
+    public void update(@RequestParam("restaurant") Integer restaurantId, @PathVariable Integer voteId, @ApiIgnore @AuthenticationPrincipal AuthUser authUser) {
+        Vote vote = voteRepository.findById(voteId).orElseThrow(() -> new NotFoundException("Not found entity with id = " + voteId));
         checkPermissionToWorkWithVote(vote, authUser);
         checkVoteTime(LocalDateTime.of(vote.getVoteDate(), LocalTime.now()), AppConfig.DEAD_LINE);
-        vote.setRestaurant(restaurantRepository.getOne(voteTo.getRestaurant_id()));
-        log.info("update vote id {} to {} by user id {}", id, voteTo, authUser.id());
+        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        log.info("update vote id {} to restaurant {} by user id {}", voteId, restaurantId, authUser.id());
     }
 
     @Transactional
